@@ -1,103 +1,189 @@
-mod rectangle;
-mod structs;
+use rand::Rng;
+use std::cmp::Ordering;
+use std::fmt::Display;
+use std::fs;
+use std::fs::File;
+use std::io;
+use std::io::{Error, ErrorKind, Read};
+use std::net::IpAddr;
+use std::panic::panic_any;
 
 fn main() {
-    // (all the type annotations are superfluous)
-    // A reference to a string allocated in read only memory
-    let pangram: &'static str = "the quick brown fox jumps over the lazy dog";
-    println!("Pangram: {}", pangram);
+    let f = File::open("./hello.txt");
 
-    // Iterate over words in reverse, no new string is allocated
-    println!("Words in reverse");
-    for word in pangram.split_whitespace().rev() {
-        println!("> {}", word);
-    }
+    let f = match f {
+        Ok(file) => file,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("Problem creating file {:?}", e),
+            },
+            other_error => {
+                panic!("Problem opening file {:?}", other_error)
+            }
+        },
+    };
 
-    // Copy chars into a vector, sort and remove duplicates
-    let mut chars: Vec<char> = pangram.chars().collect();
-    chars.sort();
-    chars.dedup();
+    let f = File::open("hello.txt").unwrap_or_else(|error| {
+        if error.kind() == ErrorKind::NotFound {
+            File::create("hello.txt")
+                .unwrap_or_else(|error| panic!("Problem creating file {:?}", error))
+        } else {
+            panic!("Problem opening file {:?}", error)
+        }
+    });
 
-    // Create an empty and growable `String`
-    let mut string = String::new();
-    for c in chars {
-        // Insert a char at the end of string
-        string.push(c);
-        // Insert a string at the end of string
-        string.push_str(", ");
-    }
+    println!("{:?}", read_username_from_file_v2().unwrap());
+    let home: IpAddr = "127.0.0.1".parse().unwrap();
 
-    // The trimmed string is a slice to the original string, hence no new
-    // allocation is performed
-    let chars_to_trim: &[char] = &[' ', ','];
-    let trimmed_str: &str = string.trim_matches(chars_to_trim);
-    println!("Used characters: {}", trimmed_str);
+    // guess_the_number();
 
-    // Heap allocate a string
-    let alice = String::from("I like dogs");
-    // Allocate new memory and store the modified string there
-    let bob: String = alice.replace("dog", "cat");
-
-    println!("Alice says: {}", alice);
-    println!("Bob says: {}", bob);
-
-    let s = String::from("Hello world");
-
-    let hello = &s[0..5];
-    let world = &s[6..s.len()];
+    println!("{}", largest(&vec![1, 2, 3]));
 }
 
-fn first_word(s: &String) -> usize {
-    let bytes = s.as_bytes();
+fn read_username_from_file_v2() -> Result<String, Error> {
+    // Version 2 using ? syntax
+    // let mut f = File::open("hello.txt")?;
 
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return i;
+    // let mut s = String::new();
+    //
+    // f.read_to_string(&mut s)?;
+    // Ok(s)
+
+    // Version with chaining
+    // let mut s = String::new();
+    //
+    // File::open("hello.txt")?.read_to_string(& mut s)?;
+    // Ok(s)
+    fs::read_to_string("hello.txt")
+}
+
+fn read_username_from_file() -> Result<String, Error> {
+    let f = File::open("hello.txt");
+
+    let mut f = match f {
+        Ok(file) => file,
+        Err(error) => return Err(error),
+    };
+
+    let mut s = String::new();
+
+    match f.read_to_string(&mut s) {
+        Ok(_) => Ok(s),
+        Err(e) => Err(e),
+    }
+}
+
+fn guess_the_number() {
+    println!("Guess the number!");
+
+    let secret_number = rand::thread_rng().gen_range(1..101);
+
+    loop {
+        // --snip--
+
+        println!("Please input your guess.");
+
+        let mut guess = String::new();
+
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("Failed to read line");
+
+        let guess: Guess = match guess.trim().parse() {
+            Ok(num) => Guess::new(num),
+            Err(_) => continue,
+        };
+
+        // if guess < 1 || guess > 100 {
+        //     println!("The secret number will be between 1 and 100.");
+        //     continue;
+        // }
+
+        match guess.value.cmp(&secret_number) {
+            // --snip--
+            Ordering::Less => println!("Too small!"),
+            Ordering::Greater => println!("Too big!"),
+            Ordering::Equal => {
+                println!("You win!");
+                break;
+            }
         }
     }
-
-    s.len()
 }
 
-fn first_word_slice(s: &str) -> &str {
-    let bytes = s.as_bytes();
-
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return &s[0..i];
+fn largest<T>(list: &[T]) -> &T
+where
+    T: PartialOrd,
+{
+    let mut largest = &list[0];
+    for item in list {
+        if item > &*largest {
+            largest = &item;
         }
     }
-
-    &s[..]
+    largest
 }
 
-#[test]
-fn test_first_word() {
-    assert_eq!(first_word(&String::from("Hello world")), 5)
+#[derive(Debug)]
+pub struct Guess {
+    value: i32,
 }
 
-#[test]
-fn test_first_word_bug() {
-    let mut s = String::from("Hello world");
-    let word = first_word(&s); // Value will be 5
+impl Guess {
+    pub fn new(value: i32) -> Guess {
+        if value < 1 || value > 100 {
+            panic!("must be between 1 - 100 {}", value);
+        }
 
-    s.clear(); // Empties string makes it equal to ""
-    assert_eq!(word, 5);
+        Guess { value }
+    }
 
-    // Word still has 5 but the string has been set to 5
+    pub fn value(&mut self) -> i32 {
+        self.value
+    }
 }
 
-#[test]
-fn test_first_word_slice() {
-    let s = String::from("hello world");
+struct Point<T, U> {
+    x: T,
+    y: U,
+}
 
-    let word = first_word_slice(&s);
+impl<T, U> Point<T, U> {
+    fn x(&self) -> &T {
+        &self.x
+    }
+}
 
-    let s2 = "hello world";
+impl<T, U> Point<T, U> {
+    fn mixup<V, W>(self, other: Point<V, W>) -> Point<T, W> {
+        Point {
+            x: self.x,
+            y: other.y,
+        }
+    }
+}
 
-    let word = first_word_slice(s2);
+struct Pair<T> {
+    x: T,
+    y: T,
+}
 
-    // s.clear(); // error!
+impl<T> Pair<T> {
+    fn new(x: T, y: T) -> Self {
+        Self { x, y }
+    }
+}
 
-    println!("{}", word)
+impl<T> Pair<T>
+where
+    T: Display + PartialOrd,
+{
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("The largest member is x = {}", self.x);
+        } else {
+            println!("The largest member is y = {}", self.y);
+        }
+    }
 }

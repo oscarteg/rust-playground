@@ -1,16 +1,10 @@
 [package]
-name = "rust_playground"
+name = "minigrep"
 version = "0.1.0"
-authors = ["Oscar te Giffel <oscar@tegiffel.com>"]
 edition = "2018"
-
-[workspace]
-members = [
-    "minigrep",
-]
-
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rand = "0.8.4"
+predicates = "2.0.2"
+
