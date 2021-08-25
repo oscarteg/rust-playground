@@ -1,17 +1,8 @@
 [package]
-name = "rust_playground"
+name = "workout"
 version = "0.1.0"
-authors = ["Oscar te Giffel <oscar@tegiffel.com>"]
 edition = "2018"
-
-[workspace]
-members = [
-    "minigrep",
-    "workout"
-]
-
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rand = "0.8.4"

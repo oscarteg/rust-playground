@@ -1,4 +1,6 @@
+mod iterator;
 mod lifetime;
+mod smart_pointers;
 mod traits;
 
 pub fn add_two(a: i32) -> i32 {
