@@ -28,7 +28,7 @@ impl Summary for Tweet {
     }
 }
 
-pub fn notify<T>(item: &T) -> &Summary
+pub fn notify<T>(item: &T) -> &dyn Summary
 where
     T: Summary,
 {

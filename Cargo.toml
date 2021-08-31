@@ -9,7 +9,9 @@ members = [
     "minigrep",
     "workout",
     "ethereum",
-    "gui"
+    "gui",
+    "blog",
+    "rocket"
 ]
 
 

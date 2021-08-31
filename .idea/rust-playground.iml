@@ -7,8 +7,10 @@
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/minigrep/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/workout/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/blog/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ethereum/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/gui/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rocket/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/minigrep/target" />
     </content>

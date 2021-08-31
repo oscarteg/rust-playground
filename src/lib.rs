@@ -1,5 +1,7 @@
+mod drop;
 mod iterator;
 mod lifetime;
+mod macros;
 mod smart_pointers;
 mod traits;
 
