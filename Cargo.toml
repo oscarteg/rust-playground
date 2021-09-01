@@ -12,7 +12,8 @@ members = [
     "gui",
     "blog",
     "rocket",
-    "chat-tokio"
+    "chat-tokio",
+    "yew-app"
 ]
 
 
