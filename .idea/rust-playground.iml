@@ -11,6 +11,7 @@
       <sourceFolder url="file://$MODULE_DIR$/ethereum/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/gui/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rocket/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/chat-tokio/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/minigrep/target" />
     </content>
