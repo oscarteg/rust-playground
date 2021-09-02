@@ -19,13 +19,28 @@ async fn main() {
         // Like lightweight threads
         // Tokio schedules the tasks for the most efficient processing
         // Rust has async block instead of async functions like Javascript, could be writen as async function but this is fine.
+
+        //
         tokio::spawn(async move {
             let (reader, mut writer) = socket.split();
 
             let mut reader = BufReader::new(reader);
             let mut line = String::new();
 
+            //// Example of using spawn to write message
+            // This does not work because the socket does not live long enough to be used
+            // Little vague...
+
+            // tokio::spawn(async move {
+            //     reader.read_line(&mut line).await.unwrap();
+            // });
+            //
+            // tx.send(("".to_string(), addr)).unwrap();
+            //// End example
+
             loop {
+                // Another way to do concurrency
+                // Select is that need to operate in the same shared state and have finite number of things
                 tokio::select! {
                          result = reader.read_line(&mut line) => {
                             if result.unwrap() == 0 {
