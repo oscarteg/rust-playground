@@ -43,11 +43,14 @@ async fn main() {
                 // Select is that need to operate in the same shared state and have finite number of things
                 tokio::select! {
                          result = reader.read_line(&mut line) => {
-                            if result.unwrap() == 0 {
+                            if result.
                                 break
                             }
 
-                            tx.send((line.clone(), addr));
+
+                            if let Err(e) = tx.send((line.clone(), addr)) {
+                                panic!("Something whent wrong: {}", e);
+                            }
                             line.clear();
                         }
                         result = rx.recv() => {
