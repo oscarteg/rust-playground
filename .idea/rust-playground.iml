@@ -13,6 +13,8 @@
       <sourceFolder url="file://$MODULE_DIR$/rocket/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/chat-tokio/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/yew-app/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/codeforces/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/patterns/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/minigrep/target" />
     </content>

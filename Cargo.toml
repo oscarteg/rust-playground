@@ -13,7 +13,10 @@ members = [
     "blog",
     "rocket",
     "chat-tokio",
-    "yew-app"
+    "yew-app",
+    "patterns",
+    "codeforces"
+
 ]
 
 

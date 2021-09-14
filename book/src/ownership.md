@@ -1,7 +1,5 @@
 # Ownership
 
-## Ownership, stack and the heap
-
 Memory is managed through a system of ownership with a set of rules that the compiler checks at compile time. None fo the ownership features slow down your program while running.
 
 There are 2 types of memory. **Stack** stores values in the order it gets them and removes in the opposite order *"last in, first out".* You can push items on or pop items of the stack. Data stored on the stack has to have a fixed size. The heap is a random place where the compiler finds a random spot and returns a pointer, this is called *allocating* memory.
@@ -22,3 +20,8 @@ let s4 = s3;
 
 println!("{}", s3);
 ```
+
+ 
+
+## Ownership, stack and the heap
+

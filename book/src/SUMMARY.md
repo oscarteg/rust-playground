@@ -1,7 +1,7 @@
 # Summary
 
 # Key features
-[Introduction](README.md)
+- [Introduction](README.md)
 - [Ownership](ownership.md)
 - [Structs](structs.md)
 - [Enum](enum.md)
@@ -13,3 +13,4 @@
 - [Trait (objects)](trait-objects.md)
 - [References](references.md)
 - [Iterators](iterators.md)
+- [Concurrency](concurrency.md)
