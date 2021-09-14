@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Key features</li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">1.</strong> Ownership</a></li><li class="chapter-item expanded "><a href="structs.html" class="active"><strong aria-hidden="true">2.</strong> Structs</a></li><li class="chapter-item expanded "><a href="enum.html"><strong aria-hidden="true">3.</strong> Enum</a></li><li class="chapter-item expanded affix "><li class="part-title">Hard topics</li><li class="chapter-item expanded "><a href="smart-pointers/index.html"><strong aria-hidden="true">4.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="smart-pointers/box.html"><strong aria-hidden="true">4.1.</strong> Box</a></li><li class="chapter-item expanded "><a href="smart-pointers/ref-cell.html"><strong aria-hidden="true">4.2.</strong> Ref Cell</a></li></ol></li><li class="chapter-item expanded "><a href="trait-objects.html"><strong aria-hidden="true">5.</strong> Trait (objects)</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">6.</strong> References</a></li><li class="chapter-item expanded "><a href="iterators.html"><strong aria-hidden="true">7.</strong> Iterators</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Key features</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">2.</strong> Ownership</a></li><li class="chapter-item expanded "><a href="structs.html" class="active"><strong aria-hidden="true">3.</strong> Structs</a></li><li class="chapter-item expanded "><a href="enum.html"><strong aria-hidden="true">4.</strong> Enum</a></li><li class="chapter-item expanded affix "><li class="part-title">Hard topics</li><li class="chapter-item expanded "><a href="smart-pointers/index.html"><strong aria-hidden="true">5.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="smart-pointers/box.html"><strong aria-hidden="true">5.1.</strong> Box</a></li><li class="chapter-item expanded "><a href="smart-pointers/ref-cell.html"><strong aria-hidden="true">5.2.</strong> Ref Cell</a></li></ol></li><li class="chapter-item expanded "><a href="trait-objects.html"><strong aria-hidden="true">6.</strong> Trait (objects)</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">7.</strong> References</a></li><li class="chapter-item expanded "><a href="iterators.html"><strong aria-hidden="true">8.</strong> Iterators</a></li><li class="chapter-item expanded "><a href="concurrency.html"><strong aria-hidden="true">9.</strong> Concurrency</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -152,6 +152,29 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="structs"><a class="header" href="#structs">Structs</a></h1>
+<p>Structs are different from classes. </p>
+<ul>
+<li>Structs are  <em>value</em> types and classes are <em>reference</em> types. Structs are because of that allocated on the stack or inline in containing types. While classes are allocated on the heap. <strong>Rust has no classes.</strong></li>
+<li>Structs have no default constructor function. You can just create it yourself if you really want</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust edition2018">struct Foo {
+    bar: String
+}
+
+impl Foo {
+    fn new() -&gt; Self {
+        Self {
+            bar: String::from(&quot;Hello World&quot;)
+        }
+    }
+}
+
+fn main() {
+    let foo = Foo::new();
+
+    println!(&quot;{}&quot;, foo.bar.as_str())
+}
+</code></pre></pre>
 
                     </main>
 

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Iterators - My own documentation on the rust language</title>
+        <title>Concurrency - My own documentation on the rust language</title>
                 
 
         <!-- Custom HTML head -->
@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Key features</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">2.</strong> Ownership</a></li><li class="chapter-item expanded "><a href="structs.html"><strong aria-hidden="true">3.</strong> Structs</a></li><li class="chapter-item expanded "><a href="enum.html"><strong aria-hidden="true">4.</strong> Enum</a></li><li class="chapter-item expanded affix "><li class="part-title">Hard topics</li><li class="chapter-item expanded "><a href="smart-pointers/index.html"><strong aria-hidden="true">5.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="smart-pointers/box.html"><strong aria-hidden="true">5.1.</strong> Box</a></li><li class="chapter-item expanded "><a href="smart-pointers/ref-cell.html"><strong aria-hidden="true">5.2.</strong> Ref Cell</a></li></ol></li><li class="chapter-item expanded "><a href="trait-objects.html"><strong aria-hidden="true">6.</strong> Trait (objects)</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">7.</strong> References</a></li><li class="chapter-item expanded "><a href="iterators.html" class="active"><strong aria-hidden="true">8.</strong> Iterators</a></li><li class="chapter-item expanded "><a href="concurrency.html"><strong aria-hidden="true">9.</strong> Concurrency</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Key features</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">2.</strong> Ownership</a></li><li class="chapter-item expanded "><a href="structs.html"><strong aria-hidden="true">3.</strong> Structs</a></li><li class="chapter-item expanded "><a href="enum.html"><strong aria-hidden="true">4.</strong> Enum</a></li><li class="chapter-item expanded affix "><li class="part-title">Hard topics</li><li class="chapter-item expanded "><a href="smart-pointers/index.html"><strong aria-hidden="true">5.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="smart-pointers/box.html"><strong aria-hidden="true">5.1.</strong> Box</a></li><li class="chapter-item expanded "><a href="smart-pointers/ref-cell.html"><strong aria-hidden="true">5.2.</strong> Ref Cell</a></li></ol></li><li class="chapter-item expanded "><a href="trait-objects.html"><strong aria-hidden="true">6.</strong> Trait (objects)</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">7.</strong> References</a></li><li class="chapter-item expanded "><a href="iterators.html"><strong aria-hidden="true">8.</strong> Iterators</a></li><li class="chapter-item expanded "><a href="concurrency.html" class="active"><strong aria-hidden="true">9.</strong> Concurrency</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -122,7 +122,7 @@
                                                                         <a href="https://github.com/Oscarteg/rust-playground/tree/master/book" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                                                                        <a href="https://github.com/rust-lang/mdBook/edit/master/guide/src/iterators.md" title="Suggest an edit" aria-label="Suggest an edit">
+                                                                        <a href="https://github.com/rust-lang/mdBook/edit/master/guide/src/concurrency.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
                         
@@ -151,27 +151,16 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="iterators"><a class="header" href="#iterators">Iterators</a></h1>
-<pre><pre class="playground"><code class="language-rust edition2018">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>pub fn flatten(iterator mut) {
-    
-}
-<span class="boring">}
-</span></code></pre></pre>
+                        <h1 id="concurrency"><a class="header" href="#concurrency">Concurrency</a></h1>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                                                    <a rel="prev" href="references.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                                    <a rel="prev" href="iterators.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
-                                                    <a rel="next" href="concurrency.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
                         
                         <div style="clear: both"></div>
                     </nav>
@@ -179,13 +168,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                                    <a rel="prev" href="references.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                    <a rel="prev" href="iterators.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
-                                    <a rel="next" href="concurrency.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
                             </nav>
 
         </div>

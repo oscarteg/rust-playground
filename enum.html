@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Key features</li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">1.</strong> Ownership</a></li><li class="chapter-item expanded "><a href="structs.html"><strong aria-hidden="true">2.</strong> Structs</a></li><li class="chapter-item expanded "><a href="enum.html" class="active"><strong aria-hidden="true">3.</strong> Enum</a></li><li class="chapter-item expanded affix "><li class="part-title">Hard topics</li><li class="chapter-item expanded "><a href="smart-pointers/index.html"><strong aria-hidden="true">4.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="smart-pointers/box.html"><strong aria-hidden="true">4.1.</strong> Box</a></li><li class="chapter-item expanded "><a href="smart-pointers/ref-cell.html"><strong aria-hidden="true">4.2.</strong> Ref Cell</a></li></ol></li><li class="chapter-item expanded "><a href="trait-objects.html"><strong aria-hidden="true">5.</strong> Trait (objects)</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">6.</strong> References</a></li><li class="chapter-item expanded "><a href="iterators.html"><strong aria-hidden="true">7.</strong> Iterators</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Key features</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">2.</strong> Ownership</a></li><li class="chapter-item expanded "><a href="structs.html"><strong aria-hidden="true">3.</strong> Structs</a></li><li class="chapter-item expanded "><a href="enum.html" class="active"><strong aria-hidden="true">4.</strong> Enum</a></li><li class="chapter-item expanded affix "><li class="part-title">Hard topics</li><li class="chapter-item expanded "><a href="smart-pointers/index.html"><strong aria-hidden="true">5.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="smart-pointers/box.html"><strong aria-hidden="true">5.1.</strong> Box</a></li><li class="chapter-item expanded "><a href="smart-pointers/ref-cell.html"><strong aria-hidden="true">5.2.</strong> Ref Cell</a></li></ol></li><li class="chapter-item expanded "><a href="trait-objects.html"><strong aria-hidden="true">6.</strong> Trait (objects)</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">7.</strong> References</a></li><li class="chapter-item expanded "><a href="iterators.html"><strong aria-hidden="true">8.</strong> Iterators</a></li><li class="chapter-item expanded "><a href="concurrency.html"><strong aria-hidden="true">9.</strong> Concurrency</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -151,7 +151,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="enum"><a class="header" href="#enum">Enum</a></h1>
+                        <h2 id="enum"><a class="header" href="#enum">Enum</a></h2>
 <p>As apposed to other programming languages, you can store values in Enums like follows;</p>
 <pre><pre class="playground"><code class="language-rust edition2018">
 <span class="boring">#![allow(unused)]
@@ -176,9 +176,18 @@ struct WriteMessage(String);
 struct ChangeColorMessage(i32, i32, i32);
 <span class="boring">}
 </span></code></pre></pre>
-<p>Two particularly useful enums are <code>Result</code> and <code>Option</code>.</p>
-<p><code>Result</code> gives you a way to represent whether an operation is successful or not, as well as a way to access the data or error of the... result. 👀</p>
-<p><code>Option</code> gives you a way to represent whether something exists or not. This is generally used as a replacement for nullable types (which Rust does not have<a href="https://doc.rust-lang.org/core/ptr/index.html">*</a>).</p>
+<h2 id="useful-enums"><a class="header" href="#useful-enums">Useful enums</a></h2>
+<p>Two particularly useful enums are <code>Result</code> and <code>Option</code>.</p>
+<ul>
+<li>
+<p><code>Result</code> gives you a way to represent whether an operation is successful or not, as well as a way to access the data or error of the... result. </p>
+</li>
+<li>
+<p><code>Option</code> gives you a way to represent whether something exists or not. This is generally used as a replacement for nullable types (which Rust does not have<a href="https://doc.rust-lang.org/core/ptr/index.html">*</a>).</p>
+</li>
+</ul>
+<h3 id="when-should-you-use-which"><a class="header" href="#when-should-you-use-which">When should you use which?</a></h3>
+<p>A quick shortcut to remember which to use is <em>Option (to be, or not to be)</em> and <em>Results (is everything ok?)</em>. Also Result is like an <code>Err</code>. </p>
 
                     </main>
 

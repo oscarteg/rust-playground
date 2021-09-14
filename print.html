@@ -85,7 +85,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Key features</li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">1.</strong> Ownership</a></li><li class="chapter-item expanded "><a href="structs.html"><strong aria-hidden="true">2.</strong> Structs</a></li><li class="chapter-item expanded "><a href="enum.html"><strong aria-hidden="true">3.</strong> Enum</a></li><li class="chapter-item expanded affix "><li class="part-title">Hard topics</li><li class="chapter-item expanded "><a href="smart-pointers/index.html"><strong aria-hidden="true">4.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="smart-pointers/box.html"><strong aria-hidden="true">4.1.</strong> Box</a></li><li class="chapter-item expanded "><a href="smart-pointers/ref-cell.html"><strong aria-hidden="true">4.2.</strong> Ref Cell</a></li></ol></li><li class="chapter-item expanded "><a href="trait-objects.html"><strong aria-hidden="true">5.</strong> Trait (objects)</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">6.</strong> References</a></li><li class="chapter-item expanded "><a href="iterators.html"><strong aria-hidden="true">7.</strong> Iterators</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Key features</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">2.</strong> Ownership</a></li><li class="chapter-item expanded "><a href="structs.html"><strong aria-hidden="true">3.</strong> Structs</a></li><li class="chapter-item expanded "><a href="enum.html"><strong aria-hidden="true">4.</strong> Enum</a></li><li class="chapter-item expanded affix "><li class="part-title">Hard topics</li><li class="chapter-item expanded "><a href="smart-pointers/index.html"><strong aria-hidden="true">5.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="smart-pointers/box.html"><strong aria-hidden="true">5.1.</strong> Box</a></li><li class="chapter-item expanded "><a href="smart-pointers/ref-cell.html"><strong aria-hidden="true">5.2.</strong> Ref Cell</a></li></ol></li><li class="chapter-item expanded "><a href="trait-objects.html"><strong aria-hidden="true">6.</strong> Trait (objects)</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">7.</strong> References</a></li><li class="chapter-item expanded "><a href="iterators.html"><strong aria-hidden="true">8.</strong> Iterators</a></li><li class="chapter-item expanded "><a href="concurrency.html"><strong aria-hidden="true">9.</strong> Concurrency</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -149,8 +149,13 @@
 
                 <div id="content" class="content">
                     <main>
-                        <div style="break-before: page; page-break-before: always;"></div><h1 id="ownership"><a class="header" href="#ownership">Ownership</a></h1>
-<h2 id="ownership-stack-and-the-heap"><a class="header" href="#ownership-stack-and-the-heap">Ownership, stack and the heap</a></h2>
+                        <div style="break-before: page; page-break-before: always;"></div><h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>I have been trying to get to learn a new language. Something that is a bit more &quot;to the metal&quot;. For that reason I have been trying to learn Rust. It is a rather new paradigm for me to learn so the curve is pretty steep. But after a while some things just <em>clicked</em>. I changed the way I think about programming and gave new insights into how an compiler works and what you need to account for when programming. I know it is different in every programming language but it is could to be aware of what you should take in account when programming.</p>
+<p>This is my journey into Rust and things I have learned along the way.</p>
+<blockquote>
+<p><strong>Disclaimer</strong>: This is not a full guide or something. Just my notes for learning a new language </p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ownership"><a class="header" href="#ownership">Ownership</a></h1>
 <p>Memory is managed through a system of ownership with a set of rules that the compiler checks at compile time. None fo the ownership features slow down your program while running.</p>
 <p>There are 2 types of memory. <strong>Stack</strong> stores values in the order it gets them and removes in the opposite order <em>&quot;last in, first out&quot;.</em> You can push items on or pop items of the stack. Data stored on the stack has to have a fixed size. The heap is a random place where the compiler finds a random spot and returns a pointer, this is called <em>allocating</em> memory.</p>
 <p>A couple of notes:</p>
@@ -170,8 +175,32 @@ let s4 = s3;
 println!(&quot;{}&quot;, s3);
 <span class="boring">}
 </span></code></pre></pre>
+<h2 id="ownership-stack-and-the-heap"><a class="header" href="#ownership-stack-and-the-heap">Ownership, stack and the heap</a></h2>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="structs"><a class="header" href="#structs">Structs</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="enum"><a class="header" href="#enum">Enum</a></h1>
+<p>Structs are different from classes. </p>
+<ul>
+<li>Structs are  <em>value</em> types and classes are <em>reference</em> types. Structs are because of that allocated on the stack or inline in containing types. While classes are allocated on the heap. <strong>Rust has no classes.</strong></li>
+<li>Structs have no default constructor function. You can just create it yourself if you really want</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust edition2018">struct Foo {
+    bar: String
+}
+
+impl Foo {
+    fn new() -&gt; Self {
+        Self {
+            bar: String::from(&quot;Hello World&quot;)
+        }
+    }
+}
+
+fn main() {
+    let foo = Foo::new();
+
+    println!(&quot;{}&quot;, foo.bar.as_str())
+}
+</code></pre></pre>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="enum"><a class="header" href="#enum">Enum</a></h2>
 <p>As apposed to other programming languages, you can store values in Enums like follows;</p>
 <pre><pre class="playground"><code class="language-rust edition2018">
 <span class="boring">#![allow(unused)]
@@ -196,9 +225,18 @@ struct WriteMessage(String);
 struct ChangeColorMessage(i32, i32, i32);
 <span class="boring">}
 </span></code></pre></pre>
-<p>Two particularly useful enums are <code>Result</code> and <code>Option</code>.</p>
-<p><code>Result</code> gives you a way to represent whether an operation is successful or not, as well as a way to access the data or error of the... result. 👀</p>
-<p><code>Option</code> gives you a way to represent whether something exists or not. This is generally used as a replacement for nullable types (which Rust does not have<a href="https://doc.rust-lang.org/core/ptr/index.html">*</a>).</p>
+<h2 id="useful-enums"><a class="header" href="#useful-enums">Useful enums</a></h2>
+<p>Two particularly useful enums are <code>Result</code> and <code>Option</code>.</p>
+<ul>
+<li>
+<p><code>Result</code> gives you a way to represent whether an operation is successful or not, as well as a way to access the data or error of the... result. </p>
+</li>
+<li>
+<p><code>Option</code> gives you a way to represent whether something exists or not. This is generally used as a replacement for nullable types (which Rust does not have<a href="https://doc.rust-lang.org/core/ptr/index.html">*</a>).</p>
+</li>
+</ul>
+<h3 id="when-should-you-use-which"><a class="header" href="#when-should-you-use-which">When should you use which?</a></h3>
+<p>A quick shortcut to remember which to use is <em>Option (to be, or not to be)</em> and <em>Results (is everything ok?)</em>. Also Result is like an <code>Err</code>. </p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="smart-pointers"><a class="header" href="#smart-pointers">Smart pointers</a></h1>
 <p>Box is used for storing data on the <em>heap.</em></p>
 <p>When to use:</p>
@@ -313,6 +351,7 @@ fn change(some_string: &amp;mut String) {
 }
 <span class="boring">}
 </span></code></pre></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="concurrency"><a class="header" href="#concurrency">Concurrency</a></h1>
 
                     </main>
 
