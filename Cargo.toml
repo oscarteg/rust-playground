@@ -14,9 +14,8 @@ members = [
     "rocket",
     "chat-tokio",
     "yew-app",
-    "patterns",
-    "codeforces"
-
+    "codeforces",
+    "orst"
 ]
 
 

@@ -1,9 +1,8 @@
-use crate::List::Cons;
-
 mod drop;
 mod iterator;
 mod lifetime;
 mod macros;
+mod patterns;
 mod smart_pointers;
 mod traits;
 
@@ -31,8 +30,8 @@ enum Message {
 
 #[cfg(test)]
 mod tests {
+    use super::List::{Cons, Nil};
     use super::*;
-    use crate::List::Nil;
 
     #[test]
     fn internal() {

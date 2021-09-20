@@ -14,9 +14,11 @@
       <sourceFolder url="file://$MODULE_DIR$/chat-tokio/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/yew-app/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/codeforces/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/orst/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/patterns/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/minigrep/target" />
+      <excludeFolder url="file://$MODULE_DIR$/codeforces/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
