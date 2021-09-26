@@ -14,6 +14,7 @@
       <sourceFolder url="file://$MODULE_DIR$/chat-tokio/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/yew-app/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/codeforces/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/leetcode/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/orst/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/patterns/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />

@@ -1,5 +1,4 @@
 use super::Sorter;
-use crate::sort;
 
 pub struct BubbleSort;
 
@@ -42,19 +41,22 @@ impl Sorter for BubbleSort {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::bubblesort::BubbleSort;
+    use crate::Sorter;
 
     #[test]
     fn test_bubblesort() {
         let mut slice = vec![3, 2, 1];
-        sort::<_, BubbleSort>(&mut slice);
+        BubbleSort::sort(&mut slice);
+        // sort::<_, BubbleSort>(&mut slice);
         assert_eq!(slice, &[1, 2, 3])
     }
 
     #[test]
     fn test_when_everything_is_already_in_order() {
         let mut slice = vec![1, 2, 3];
-        sort::<_, BubbleSort>(&mut slice);
+        BubbleSort::sort(&mut slice);
+        // sort::<_, BubbleSort>(&mut slice);
         assert_eq!(slice, &[1, 2, 3])
     }
 }

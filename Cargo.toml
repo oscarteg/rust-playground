@@ -15,7 +15,8 @@ members = [
     "chat-tokio",
     "yew-app",
     "codeforces",
-    "orst"
+    "orst",
+    "leetcode"
 ]
 
 

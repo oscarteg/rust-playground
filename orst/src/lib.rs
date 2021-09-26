@@ -13,6 +13,7 @@ where
 }
 
 mod bubblesort;
+mod insertionsort;
 
 #[cfg(test)]
 mod tests {
