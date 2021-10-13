@@ -3,6 +3,7 @@ mod iterator;
 mod lifetime;
 mod macros;
 mod patterns;
+mod search;
 mod smart_pointers;
 mod traits;
 
