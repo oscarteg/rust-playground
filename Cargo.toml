@@ -16,7 +16,8 @@ members = [
     "yew-app",
     "codeforces",
     "orst",
-    "leetcode"
+    "leetcode",
+    "finance"
 ]
 
 

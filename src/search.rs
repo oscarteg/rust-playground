@@ -1,8 +1,9 @@
+use std::cmp::Ordering;
 use std::fmt::Debug;
 
-fn binary_search<T>(haystack: &[T], needle: T) -> Result<usize, usize>
+fn binary_search<T>(haystack: &[T], needle: &T) -> Option<usize>
 where
-    T: Ord + Debug,
+    T: Ord,
 {
     let mut head = 0;
     let mut last = haystack.len();
@@ -10,40 +11,44 @@ where
     while head < last {
         let pivot = (head + last) / 2;
 
-        if needle == haystack[pivot] {
-            return Ok(pivot);
-        } else if needle < haystack[pivot] {
-            last = pivot - 1;
-        } else {
-            head = pivot + 1;
+        match needle.cmp(&haystack[pivot]) {
+            Ordering::Equal => return Some(pivot),
+            Ordering::Less => last = pivot - 1,
+            Ordering::Greater => head = pivot + 1,
         }
     }
-    Err((head + last) / 2 + 1)
+    None
 }
 
-fn linear_search<T>(v: &[T], i: T) -> Result<usize, usize>
+fn linear_search<T>(v: &[T], i: &T) -> Option<usize>
 where
-    T: Ord + Debug,
+    T: Ord,
 {
-    for (p, x) in v.iter().enumerate() {
-        if *x == i {
-            return Ok(p);
-        } else if *x > i {
-            return Err(p);
+    for (index, item) in v.iter().enumerate() {
+        if item == i {
+            return Some(index);
         }
     }
-    Err(0)
+    None
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::search::{binary_search, linear_search};
 
     #[test]
     fn test_binary_search() {
         let mut slice = vec![1, 5, 10, 25, 56, 32, 299];
 
-        let index = super::binary_search(&slice, 5);
-        assert_eq!(index, Ok(1));
+        let index = binary_search(&slice, &5);
+        assert_eq!(index, Some(1));
+    }
+
+    #[test]
+    fn test_linear_search() {
+        let mut slice = vec![1, 5, 10, 25, 56, 32, 299];
+
+        let index = linear_search(&slice, &5);
+        assert_eq!(index, Some(1));
     }
 }

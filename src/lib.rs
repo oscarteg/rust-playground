@@ -2,6 +2,7 @@ mod drop;
 mod iterator;
 mod lifetime;
 mod macros;
+mod new_type_idiom;
 mod patterns;
 mod search;
 mod smart_pointers;

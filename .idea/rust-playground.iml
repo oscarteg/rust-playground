@@ -17,6 +17,7 @@
       <sourceFolder url="file://$MODULE_DIR$/leetcode/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/orst/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/patterns/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/finance/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/minigrep/target" />
       <excludeFolder url="file://$MODULE_DIR$/codeforces/target" />
