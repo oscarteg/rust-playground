@@ -2,7 +2,7 @@
 name = "rust_playground"
 version = "0.1.0"
 authors = ["Oscar te Giffel <oscar@tegiffel.com>"]
-edition = "2018"
+edition = "2021"
 
 [workspace]
 members = [
@@ -17,7 +17,9 @@ members = [
     "codeforces",
     "orst",
     "leetcode",
-    "finance"
+    "finance",
+    "alfred",
+    "type-driven-api"
 ]
 
 
