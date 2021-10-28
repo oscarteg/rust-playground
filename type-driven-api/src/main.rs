@@ -70,4 +70,8 @@ fn main() {
     for n in v.iter().progress() {
         expensive_calculation(n);
     }
+
+    for n in v.iter().progress().with_bound() {
+        expensive_calculation(n);
+    }
 }

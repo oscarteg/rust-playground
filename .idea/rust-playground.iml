@@ -19,9 +19,11 @@
       <sourceFolder url="file://$MODULE_DIR$/patterns/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/alfred/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/finance/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/type-driven-api/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/minigrep/target" />
       <excludeFolder url="file://$MODULE_DIR$/codeforces/target" />
+      <excludeFolder url="file://$MODULE_DIR$/type-driven-api/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
