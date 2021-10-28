@@ -166,7 +166,7 @@
 </ul>
 <p>A scope is the range within a program for which an item is valid.</p>
 <p>In Rust memory is automatically returned once the variable that owns it goes out of scope.</p>
-<pre><pre class="playground"><code class="language-rust edition2018">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let s3 = String::from(&quot;Testing&quot;);
@@ -182,7 +182,7 @@ println!(&quot;{}&quot;, s3);
 <li>Structs are  <em>value</em> types and classes are <em>reference</em> types. Structs are because of that allocated on the stack or inline in containing types. While classes are allocated on the heap. <strong>Rust has no classes.</strong></li>
 <li>Structs have no default constructor function. You can just create it yourself if you really want</li>
 </ul>
-<pre><pre class="playground"><code class="language-rust edition2018">struct Foo {
+<pre><pre class="playground"><code class="language-rust edition2021">struct Foo {
     bar: String
 }
 
@@ -202,7 +202,7 @@ fn main() {
 </code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="enum"><a class="header" href="#enum">Enum</a></h2>
 <p>As apposed to other programming languages, you can store values in Enums like follows;</p>
-<pre><pre class="playground"><code class="language-rust edition2018">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum Message {
@@ -270,7 +270,7 @@ struct ChangeColorMessage(i32, i32, i32);
 <p>The first one is generally handled by low-level libraries such as crossbeam (i.e. the APIs of such libraries will make the decisions <code>Box</code>ing or not, and you don’t have to think, just follow their lead), and the second is reasonably rare: the cost of dynamic allocation and the (typically) poorer cache locality will mean <code>Box&lt;T&gt;</code> is usually slower than just <code>T</code> itself.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="references"><a class="header" href="#references">References</a></h1>
 <p>When a function uses a value the ownership of that variable changes. A solution to this is as follows:</p>
-<pre><pre class="playground"><code class="language-rust edition2018">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s1 = String::from(&quot;hello&quot;);
 
     let (s2, len) = calculate_length(s1);
@@ -285,7 +285,7 @@ fn calculate_length(s: String) -&gt; (String, usize) {
 }
 </code></pre></pre>
 <p>It is tedious to always return the value again (and quite expensive). An other solution is the use of references.</p>
-<pre><pre class="playground"><code class="language-rust edition2018">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s1 = String::from(&quot;hello&quot;);
 
     let len = calculate_length(&amp;s1);
@@ -299,7 +299,7 @@ fn calculate_length(s: &amp;String) -&gt; usize {
 </code></pre></pre>
 <p>This lets you refer to some value without taking ownership. Because it does not own it, <em><strong>the value it points too will not be dropped when the reference goes out of scope.</strong></em></p>
 <p>Using references is like borrowing the ownership of that variable so that it doesn't get dropped when it gets out of scope. And, j<em><strong>ust as variables are immutable by default, so are references.</strong></em> There is a short coming because references are immutable and so we can't change the value.</p>
-<pre><pre class="playground"><code class="language-rust edition2018">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let s = String::from(&quot;hello&quot;);
 
     change(&amp;s);
@@ -310,7 +310,7 @@ fn change(some_string: &amp;String) {
 }
 </code></pre></pre>
 <p>This code gives the compile error: <code>cannot borrow some_string as mutable, as it is behind a &amp; reference</code>. We can fix this error easy by adding <code>mut</code> to the variable, to the reference and to accept a <code>mut</code> as parameter to the function.</p>
-<pre><pre class="playground"><code class="language-rust edition2018">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let mut s = String::from(&quot;hello&quot;);
 
     change(&amp;mut s);
@@ -326,7 +326,7 @@ fn change(some_string: &amp;mut String) {
 <p>A pointer that references a location in memory that may have been given to someone else.</p>
 </blockquote>
 <p>An example:</p>
-<pre><pre class="playground"><code class="language-rust edition2018">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn dangle() -&gt; &amp;String { // dangle returns a reference to a String
@@ -343,7 +343,7 @@ fn change(some_string: &amp;mut String) {
 <li>References must always be valid.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="iterators"><a class="header" href="#iterators">Iterators</a></h1>
-<pre><pre class="playground"><code class="language-rust edition2018">
+<pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>pub fn flatten(iterator mut) {
