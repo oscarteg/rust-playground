@@ -82,7 +82,7 @@ where
     type Item = Iter::Item;
 
     fn next(&mut self) -> Option<Self::Item> {
-        println!("{}", CLEAR);
+        print!("{}", CLEAR);
         self.bound.display(&self);
 
         self.i += 1;
