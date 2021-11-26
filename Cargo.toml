@@ -19,7 +19,8 @@ members = [
     "leetcode",
     "finance",
     "alfred",
-    "type-driven-api"
+    "type-driven-api",
+    "rust-blockchain"
 ]
 
 
