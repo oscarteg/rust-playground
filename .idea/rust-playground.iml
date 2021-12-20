@@ -26,6 +26,7 @@
       <excludeFolder url="file://$MODULE_DIR$/codeforces/target" />
       <excludeFolder url="file://$MODULE_DIR$/type-driven-api/target" />
       <excludeFolder url="file://$MODULE_DIR$/alfred/target" />
+      <excludeFolder url="file://$MODULE_DIR$/rust-blockchain/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
