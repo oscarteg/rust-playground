@@ -7,6 +7,7 @@
 - [Enum](enum.md)
 
 # Hard topics
+- [Bitwise](./bitwise.md)
 - [Smart Pointers](smart-pointers/index.md)
   - [Box](smart-pointers/box.md)
   - [Ref Cell](smart-pointers/ref-cell.md)
