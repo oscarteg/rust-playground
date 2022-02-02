@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Ownership - My own documentation on the rust language</title>
+        <title>Bitwise - My own documentation on the rust language</title>
                 
 
         <!-- Custom HTML head -->
@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Key features</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ownership.html" class="active"><strong aria-hidden="true">2.</strong> Ownership</a></li><li class="chapter-item expanded "><a href="structs.html"><strong aria-hidden="true">3.</strong> Structs</a></li><li class="chapter-item expanded "><a href="enum.html"><strong aria-hidden="true">4.</strong> Enum</a></li><li class="chapter-item expanded affix "><li class="part-title">Hard topics</li><li class="chapter-item expanded "><a href="bitwise.html"><strong aria-hidden="true">5.</strong> Bitwise</a></li><li class="chapter-item expanded "><a href="smart-pointers/index.html"><strong aria-hidden="true">6.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="smart-pointers/box.html"><strong aria-hidden="true">6.1.</strong> Box</a></li><li class="chapter-item expanded "><a href="smart-pointers/ref-cell.html"><strong aria-hidden="true">6.2.</strong> Ref Cell</a></li></ol></li><li class="chapter-item expanded "><a href="trait-objects.html"><strong aria-hidden="true">7.</strong> Trait (objects)</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">8.</strong> References</a></li><li class="chapter-item expanded "><a href="iterators.html"><strong aria-hidden="true">9.</strong> Iterators</a></li><li class="chapter-item expanded "><a href="concurrency.html"><strong aria-hidden="true">10.</strong> Concurrency</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Key features</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">2.</strong> Ownership</a></li><li class="chapter-item expanded "><a href="structs.html"><strong aria-hidden="true">3.</strong> Structs</a></li><li class="chapter-item expanded "><a href="enum.html"><strong aria-hidden="true">4.</strong> Enum</a></li><li class="chapter-item expanded affix "><li class="part-title">Hard topics</li><li class="chapter-item expanded "><a href="bitwise.html" class="active"><strong aria-hidden="true">5.</strong> Bitwise</a></li><li class="chapter-item expanded "><a href="smart-pointers/index.html"><strong aria-hidden="true">6.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="smart-pointers/box.html"><strong aria-hidden="true">6.1.</strong> Box</a></li><li class="chapter-item expanded "><a href="smart-pointers/ref-cell.html"><strong aria-hidden="true">6.2.</strong> Ref Cell</a></li></ol></li><li class="chapter-item expanded "><a href="trait-objects.html"><strong aria-hidden="true">7.</strong> Trait (objects)</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">8.</strong> References</a></li><li class="chapter-item expanded "><a href="iterators.html"><strong aria-hidden="true">9.</strong> Iterators</a></li><li class="chapter-item expanded "><a href="concurrency.html"><strong aria-hidden="true">10.</strong> Concurrency</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -122,7 +122,7 @@
                                                                         <a href="https://github.com/Oscarteg/rust-playground/tree/master/book" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                                                                        <a href="https://github.com/rust-lang/mdBook/edit/master/guide/src/ownership.md" title="Suggest an edit" aria-label="Suggest an edit">
+                                                                        <a href="https://github.com/rust-lang/mdBook/edit/master/guide/src/bitwise.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
                         
@@ -151,37 +151,51 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="ownership"><a class="header" href="#ownership">Ownership</a></h1>
-<p>Memory is managed through a system of ownership with a set of rules that the compiler checks at compile time. None fo the ownership features slow down your program while running.</p>
-<p>There are 2 types of memory. <strong>Stack</strong> stores values in the order it gets them and removes in the opposite order <em>&quot;last in, first out&quot;.</em> You can push items on or pop items of the stack. Data stored on the stack has to have a fixed size. The heap is a random place where the compiler finds a random spot and returns a pointer, this is called <em>allocating</em> memory.</p>
-<p>A couple of notes:</p>
-<ul>
-<li>Each value in Rust has a variable that's called its <em>owner.</em></li>
-<li>There can be only <strong>ONE</strong> owner.</li>
-<li>When the owner goes out of scope, the value will be dropped.</li>
-</ul>
-<p>A scope is the range within a program for which an item is valid.</p>
-<p>In Rust memory is automatically returned once the variable that owns it goes out of scope.</p>
-<pre><pre class="playground"><code class="language-rust edition2021">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let s3 = String::from(&quot;Testing&quot;);
-let s4 = s3;
+                        <h1 id="bitwise"><a class="header" href="#bitwise">Bitwise</a></h1>
+<table><thead><tr><th>Sr.No</th><th>Operator</th><th>Description</th><th>Example</th></tr></thead><tbody>
+<tr><td>1</td><td>&amp; (Bitwise AND)</td><td>It performs a Boolean AND operation on each bit of its integer arguments.</td><td>(A &amp; B) is 2</td></tr>
+<tr><td>2</td><td>| (BitWise OR)</td><td>It performs a Boolean OR operation on each bit of its integer arguments.</td><td>(A</td></tr>
+<tr><td>3</td><td>^ (Bitwise XOR)</td><td>It performs a Boolean exclusive OR operation on each bit of its integer arguments. Exclusive OR means that either operand one is true or operand two is true, but not both.</td><td>(A ^ B) is 1</td></tr>
+<tr><td>4</td><td>! (Bitwise Not)</td><td>It is a unary operator and operates by reversing all the bits in the operand.</td><td>(!B) is -4</td></tr>
+<tr><td>5</td><td>&lt;&lt; (Left Shift)</td><td>It moves all the bits in its first operand to the left by the number of places specified in the second operand. New bits are filled with zeros. Shifting a value left by one position is equivalent to multiplying it by 2, shifting two positions is equivalent to multiplying by 4, and so on.</td><td>(A &lt;&lt; 1) is 4</td></tr>
+<tr><td>6</td><td>&gt;&gt; (Right Shift)</td><td>Binary Right Shift Operator. The left operand’s value is moved right by the number of bits specified by the right operand.</td><td>(A &gt;&gt; 1) is 1</td></tr>
+<tr><td>7</td><td>&gt;&gt;&gt; (Right shift with Zero)</td><td>This operator is just like the &gt;&gt; operator, except that the bits shifted to the left are always zero.</td><td>(A &gt;&gt;&gt; 1) is 1</td></tr>
+</tbody></table>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+     let a:i32 = 2;     // Bit presentation 10
+   let b:i32 = 3;     // Bit presentation 11
 
-println!(&quot;{}&quot;, s3);
-<span class="boring">}
-</span></code></pre></pre>
-<h2 id="ownership-stack-and-the-heap"><a class="header" href="#ownership-stack-and-the-heap">Ownership, stack and the heap</a></h2>
+   let mut result:i32;
+
+   result = a &amp; b;
+   println!(&quot;(a &amp; b) =&gt; {} &quot;,result);
+
+   result = a | b;
+   println!(&quot;(a | b) =&gt; {} &quot;,result) ;
+
+   result = a ^ b;
+   println!(&quot;(a ^ b) =&gt; {} &quot;,result);
+
+   result = !b;
+   println!(&quot;(!b) =&gt; {} &quot;,result);
+
+   result = a &lt;&lt; b;
+   println!(&quot;(a &lt;&lt; b) =&gt; {}&quot;,result);
+
+   result = a &gt;&gt; b;
+   println!(&quot;(a &gt;&gt; b) =&gt; {}&quot;,result);
+}
+</code></pre></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                                                    <a rel="prev" href="index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                                    <a rel="prev" href="enum.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
-                                                    <a rel="next" href="structs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                                    <a rel="next" href="smart-pointers/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -191,11 +205,11 @@ println!(&quot;{}&quot;, s3);
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                                    <a rel="prev" href="index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                    <a rel="prev" href="enum.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
-                                    <a rel="next" href="structs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                    <a rel="next" href="smart-pointers/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                             </nav>

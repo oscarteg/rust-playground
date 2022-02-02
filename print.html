@@ -85,7 +85,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Key features</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">2.</strong> Ownership</a></li><li class="chapter-item expanded "><a href="structs.html"><strong aria-hidden="true">3.</strong> Structs</a></li><li class="chapter-item expanded "><a href="enum.html"><strong aria-hidden="true">4.</strong> Enum</a></li><li class="chapter-item expanded affix "><li class="part-title">Hard topics</li><li class="chapter-item expanded "><a href="smart-pointers/index.html"><strong aria-hidden="true">5.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="smart-pointers/box.html"><strong aria-hidden="true">5.1.</strong> Box</a></li><li class="chapter-item expanded "><a href="smart-pointers/ref-cell.html"><strong aria-hidden="true">5.2.</strong> Ref Cell</a></li></ol></li><li class="chapter-item expanded "><a href="trait-objects.html"><strong aria-hidden="true">6.</strong> Trait (objects)</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">7.</strong> References</a></li><li class="chapter-item expanded "><a href="iterators.html"><strong aria-hidden="true">8.</strong> Iterators</a></li><li class="chapter-item expanded "><a href="concurrency.html"><strong aria-hidden="true">9.</strong> Concurrency</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Key features</li><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ownership.html"><strong aria-hidden="true">2.</strong> Ownership</a></li><li class="chapter-item expanded "><a href="structs.html"><strong aria-hidden="true">3.</strong> Structs</a></li><li class="chapter-item expanded "><a href="enum.html"><strong aria-hidden="true">4.</strong> Enum</a></li><li class="chapter-item expanded affix "><li class="part-title">Hard topics</li><li class="chapter-item expanded "><a href="bitwise.html"><strong aria-hidden="true">5.</strong> Bitwise</a></li><li class="chapter-item expanded "><a href="smart-pointers/index.html"><strong aria-hidden="true">6.</strong> Smart Pointers</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="smart-pointers/box.html"><strong aria-hidden="true">6.1.</strong> Box</a></li><li class="chapter-item expanded "><a href="smart-pointers/ref-cell.html"><strong aria-hidden="true">6.2.</strong> Ref Cell</a></li></ol></li><li class="chapter-item expanded "><a href="trait-objects.html"><strong aria-hidden="true">7.</strong> Trait (objects)</a></li><li class="chapter-item expanded "><a href="references.html"><strong aria-hidden="true">8.</strong> References</a></li><li class="chapter-item expanded "><a href="iterators.html"><strong aria-hidden="true">9.</strong> Iterators</a></li><li class="chapter-item expanded "><a href="concurrency.html"><strong aria-hidden="true">10.</strong> Concurrency</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -237,6 +237,41 @@ struct ChangeColorMessage(i32, i32, i32);
 </ul>
 <h3 id="when-should-you-use-which"><a class="header" href="#when-should-you-use-which">When should you use which?</a></h3>
 <p>A quick shortcut to remember which to use is <em>Option (to be, or not to be)</em> and <em>Results (is everything ok?)</em>. Also Result is like an <code>Err</code>. </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="bitwise"><a class="header" href="#bitwise">Bitwise</a></h1>
+<table><thead><tr><th>Sr.No</th><th>Operator</th><th>Description</th><th>Example</th></tr></thead><tbody>
+<tr><td>1</td><td>&amp; (Bitwise AND)</td><td>It performs a Boolean AND operation on each bit of its integer arguments.</td><td>(A &amp; B) is 2</td></tr>
+<tr><td>2</td><td>| (BitWise OR)</td><td>It performs a Boolean OR operation on each bit of its integer arguments.</td><td>(A</td></tr>
+<tr><td>3</td><td>^ (Bitwise XOR)</td><td>It performs a Boolean exclusive OR operation on each bit of its integer arguments. Exclusive OR means that either operand one is true or operand two is true, but not both.</td><td>(A ^ B) is 1</td></tr>
+<tr><td>4</td><td>! (Bitwise Not)</td><td>It is a unary operator and operates by reversing all the bits in the operand.</td><td>(!B) is -4</td></tr>
+<tr><td>5</td><td>&lt;&lt; (Left Shift)</td><td>It moves all the bits in its first operand to the left by the number of places specified in the second operand. New bits are filled with zeros. Shifting a value left by one position is equivalent to multiplying it by 2, shifting two positions is equivalent to multiplying by 4, and so on.</td><td>(A &lt;&lt; 1) is 4</td></tr>
+<tr><td>6</td><td>&gt;&gt; (Right Shift)</td><td>Binary Right Shift Operator. The left operand’s value is moved right by the number of bits specified by the right operand.</td><td>(A &gt;&gt; 1) is 1</td></tr>
+<tr><td>7</td><td>&gt;&gt;&gt; (Right shift with Zero)</td><td>This operator is just like the &gt;&gt; operator, except that the bits shifted to the left are always zero.</td><td>(A &gt;&gt;&gt; 1) is 1</td></tr>
+</tbody></table>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+     let a:i32 = 2;     // Bit presentation 10
+   let b:i32 = 3;     // Bit presentation 11
+
+   let mut result:i32;
+
+   result = a &amp; b;
+   println!(&quot;(a &amp; b) =&gt; {} &quot;,result);
+
+   result = a | b;
+   println!(&quot;(a | b) =&gt; {} &quot;,result) ;
+
+   result = a ^ b;
+   println!(&quot;(a ^ b) =&gt; {} &quot;,result);
+
+   result = !b;
+   println!(&quot;(!b) =&gt; {} &quot;,result);
+
+   result = a &lt;&lt; b;
+   println!(&quot;(a &lt;&lt; b) =&gt; {}&quot;,result);
+
+   result = a &gt;&gt; b;
+   println!(&quot;(a &gt;&gt; b) =&gt; {}&quot;,result);
+}
+</code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="smart-pointers"><a class="header" href="#smart-pointers">Smart pointers</a></h1>
 <p>Box is used for storing data on the <em>heap.</em></p>
 <p>When to use:</p>
@@ -343,14 +378,34 @@ fn change(some_string: &amp;mut String) {
 <li>References must always be valid.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="iterators"><a class="header" href="#iterators">Iterators</a></h1>
+<p>Iterator is a trait that describes </p>
+<p>There are three common methods which can create iterators from a collection:</p>
+<p>iter(), which iterates over &amp;T. So by reference
+iter_mut(), which iterates over &amp;mut T. So by mut reference
+into_iter(), which iterates over T. Iterates and <em>moves</em> into the new scope. </p>
+<p>In short: _If you just need to &quot;look at&quot; the data, use <code>iter</code>, if you need to edit/mutate it, use <code>iter_mut</code>, and if you need to give it a new owner, use <code>into_iter</code>. _</p>
+<p>The iterator returned by into_iter may yield any of T, &amp;T or &amp;mut T, depending on the context.
+The iterator returned by iter will yield &amp;T, by convention.
+The iterator returned by iter_mut will yield &amp;mut T, by convention.</p>
 <pre><pre class="playground"><code class="language-rust edition2021">
 <span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>pub fn flatten(iterator mut) {
-    
+</span>pub trait IntoIterator 
+where
+    &lt;Self::IntoIter as Iterator&gt;::Item == Self::Item, 
+{
+    type Item;
+    type IntoIter: Iterator;
+    fn into_iter(self) -&gt; Self::IntoIter;
 }
+
+// Vec implements IntoIterator 3 times
+impl&lt;T&gt; IntoIterator for Vec&lt;T&gt;
+impl&lt;'a, T&gt; IntoIterator for &amp;'a Vec&lt;T&gt;
+impl&lt;'a, T&gt; IntoIterator for &amp;'a mut Vec&lt;T&gt;
 <span class="boring">}
 </span></code></pre></pre>
+<p>You implement this trait when you want to specify how a particular type is to be converted into an iterator. Most notably, if a type implements <code>IntoIterator</code> it can be used in a <code>for</code> loop.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="concurrency"><a class="header" href="#concurrency">Concurrency</a></h1>
 
                     </main>
