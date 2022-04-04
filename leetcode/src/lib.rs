@@ -1,4 +1,5 @@
 mod add_two_numbers;
+mod binary_search;
 
 // Definition for singly-linked list.
 #[derive(PartialEq, Eq, Clone, Debug)]

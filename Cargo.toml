@@ -18,7 +18,6 @@ members = [
     "orst",
     "leetcode",
     "finance",
-    "alfred",
     "type-driven-api",
     "rust-blockchain"
 ]
