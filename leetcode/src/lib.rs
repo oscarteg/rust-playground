@@ -2,6 +2,7 @@ mod add_two_numbers;
 mod binary_search;
 mod first_bad_version;
 mod search_insert_position;
+mod sorted_squares;
 
 // Definition for singly-linked list.
 #[derive(PartialEq, Eq, Clone, Debug)]
