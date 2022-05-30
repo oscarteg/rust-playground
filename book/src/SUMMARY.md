@@ -15,3 +15,6 @@
 - [References](references.md)
 - [Iterators](iterators.md)
 - [Concurrency](concurrency.md)
+
+# Algorithms
+- [Heap Sort](./algorithms/heap_sort.md)

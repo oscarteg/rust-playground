@@ -1,5 +1,6 @@
 mod drop;
 mod iterator;
+mod jwt;
 mod lifetime;
 mod macros;
 mod new_type_idiom;
