@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use std::default::Default;
 
 const SNAKE_HEAD_COLOR: Color = Color::rgb(0.7, 0.7, 0.7);
 
@@ -104,6 +105,13 @@ fn snake_movement(
 
 fn main() {
     App::new()
+        .insert_resource(ClearColor(Color::rgb(0.04, 0.04, 0.04)))
+        .insert_resource(WindowDescriptor {
+            title: "Snake!".to_string(),
+            width: 500.0,
+            height: 500.0,
+            ..Default::default()
+        })
         .add_startup_system(setup_camera)
         .add_startup_system(spawn_snake)
         .add_system(snake_movement)
