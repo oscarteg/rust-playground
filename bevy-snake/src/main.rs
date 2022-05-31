@@ -1,10 +1,47 @@
+use bevy::core::FixedTimestep;
 use bevy::prelude::*;
+use rand::prelude::random;
 use std::default::Default;
 
 const SNAKE_HEAD_COLOR: Color = Color::rgb(0.7, 0.7, 0.7);
+const FOOD_COLOR: Color = Color::rgb(1.0, 0.0, 1.0);
+const SNAKE_SEGMENT_COLOR: Color = Color::rgb(0.3, 0.3, 0.3);
 
 const ARENA_WIDTH: u32 = 10;
 const ARENA_HEIGHT: u32 = 10;
+
+#[derive(PartialEq, Clone, Copy)]
+enum Direction {
+    Left,
+    Right,
+    Up,
+    Down,
+}
+
+impl Direction {
+    fn opposite(self) -> Self {
+        match self {
+            Self::Left => Self::Right,
+            Self::Right => Self::Left,
+            Self::Up => Self::Down,
+            Self::Down => Self::Up,
+        }
+    }
+}
+
+#[derive(Component)]
+struct SnakeHead {
+    direction: Direction,
+}
+
+#[derive(Component)]
+struct Food;
+
+#[derive(Component)]
+struct SnakeSegment;
+
+#[derive(Default)]
+struct SnakeSegments(Vec<Entity>);
 
 #[derive(Component, Clone, Copy, PartialEq, Eq, Debug)]
 struct Position {
@@ -27,29 +64,46 @@ impl Size {
     }
 }
 
-#[derive(Component)]
-struct SnakeHead;
-
 fn setup_camera(mut commands: Commands) {
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 }
 
-fn spawn_snake(mut commands: Commands) {
+fn food_spawner(mut commands: Commands) {
     commands
         .spawn_bundle(SpriteBundle {
             sprite: Sprite {
-                color: SNAKE_HEAD_COLOR,
-                ..default()
-            },
-            transform: Transform {
-                scale: Vec3::new(10.0, 10.0, 10.0),
+                color: FOOD_COLOR,
                 ..default()
             },
             ..default()
         })
-        .insert(SnakeHead)
-        .insert(Position { x: 3, y: 3 })
+        .insert(Food)
+        .insert(Position {
+            x: (random::<f32>() * ARENA_WIDTH as f32) as i32,
+            y: (random::<f32>() * ARENA_HEIGHT as f32) as i32,
+        })
         .insert(Size::square(0.8));
+}
+
+fn spawn_snake(mut commands: Commands, mut segments: ResMut<SnakeSegments>) {
+    *segments = SnakeSegments(vec![
+        commands
+            .spawn_bundle(SpriteBundle {
+                sprite: Sprite {
+                    color: SNAKE_HEAD_COLOR,
+                    ..default()
+                },
+                ..default()
+            })
+            .insert(SnakeHead {
+                direction: Direction::Up,
+            })
+            .insert(SnakeSegment)
+            .insert(Position { x: 3, y: 3 })
+            .insert(Size::square(0.8))
+            .id(),
+        spawn_segment(commands, Position { x: 3, y: 2 }),
+    ]);
 }
 
 fn size_scaling(windows: Res<Windows>, mut q: Query<(&Size, &mut Transform)>) {
@@ -67,7 +121,7 @@ fn position_translation(windows: Res<Windows>, mut q: Query<(&Position, &mut Tra
     fn convert(pos: f32, bound_window: f32, bound_game: f32) -> f32 {
         let tile_size = bound_window / bound_game;
         pos / bound_game * bound_window - (bound_window / 2.) + (tile_size / 2.)
-    };
+    }
 
     let window = windows.get_primary().unwrap();
 
@@ -80,27 +134,61 @@ fn position_translation(windows: Res<Windows>, mut q: Query<(&Position, &mut Tra
     }
 }
 
-fn snake_movement(
-    keyboard_input: Res<Input<KeyCode>>,
-    mut head_positions: Query<&mut Position, With<SnakeHead>>,
-) {
-    for mut pos in head_positions.iter_mut() {
-        if keyboard_input.pressed(KeyCode::Left) {
-            pos.x -= 1;
-        }
+fn snake_movement(mut heads: Query<(&mut Position, &SnakeHead)>) {
+    if let Some((mut head_pos, head)) = heads.iter_mut().next() {
+        match &head.direction {
+            Direction::Left => {
+                head_pos.x -= 1;
+            }
 
-        if keyboard_input.pressed(KeyCode::Right) {
-            pos.x += 1;
-        }
+            Direction::Right => {
+                head_pos.x += 1;
+            }
 
-        if keyboard_input.pressed(KeyCode::Up) {
-            pos.y += 1;
-        }
+            Direction::Up => {
+                head_pos.y += 1;
+            }
 
-        if keyboard_input.pressed(KeyCode::Down) {
-            pos.y -= 1;
+            Direction::Down => {
+                head_pos.y -= 1;
+            }
         }
     }
+}
+
+fn snake_movement_input(keyboard_input: Res<Input<KeyCode>>, mut heads: Query<&mut SnakeHead>) {
+    if let Some(mut head) = heads.iter_mut().next() {
+        let dir: Direction = if keyboard_input.pressed(KeyCode::Left) {
+            Direction::Left
+        } else if keyboard_input.pressed(KeyCode::Right) {
+            Direction::Right
+        } else if keyboard_input.pressed(KeyCode::Up) {
+            Direction::Up
+        } else if keyboard_input.pressed(KeyCode::Down) {
+            Direction::Down
+        } else {
+            head.direction
+        };
+
+        if dir != head.direction.opposite() {
+            head.direction = dir;
+        }
+    }
+}
+
+fn spawn_segment(mut commands: Commands, position: Position) -> Entity {
+    commands
+        .spawn_bundle(SpriteBundle {
+            sprite: Sprite {
+                color: SNAKE_SEGMENT_COLOR,
+                ..default()
+            },
+            ..default()
+        })
+        .insert(SnakeSegment)
+        .insert(position)
+        .insert(Size::square(0.65))
+        .id()
 }
 
 fn main() {
@@ -114,13 +202,24 @@ fn main() {
         })
         .add_startup_system(setup_camera)
         .add_startup_system(spawn_snake)
-        .add_system(snake_movement)
+        .insert_resource(SnakeSegments::default())
+        .add_system_set(
+            SystemSet::new()
+                .with_run_criteria(FixedTimestep::step(0.150))
+                .with_system(snake_movement),
+        )
+        .add_system_set(
+            SystemSet::new()
+                .with_run_criteria(FixedTimestep::step(1.0))
+                .with_system(food_spawner),
+        )
         .add_system_set_to_stage(
             CoreStage::PostUpdate,
             SystemSet::new()
                 .with_system(position_translation)
                 .with_system(size_scaling),
         )
+        .add_system(snake_movement_input.before(snake_movement))
         .add_plugins(DefaultPlugins)
         .run()
 }

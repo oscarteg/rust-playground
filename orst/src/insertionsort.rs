@@ -3,7 +3,6 @@ use super::Sorter;
 pub struct InsertionSort;
 
 pub struct InsertionSortWithBinary;
-asdasd
 
 impl Sorter for InsertionSortWithBinary {
     fn sort<T>(slice: &mut [T])
