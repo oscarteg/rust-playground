@@ -1,7 +1,6 @@
 use bevy::core::FixedTimestep;
 use bevy::prelude::*;
 use rand::prelude::random;
-use std::default::Default;
 
 const SNAKE_HEAD_COLOR: Color = Color::rgb(0.7, 0.7, 0.7);
 const FOOD_COLOR: Color = Color::rgb(1.0, 0.0, 1.0);
@@ -17,6 +16,11 @@ enum Direction {
     Up,
     Down,
 }
+
+struct GrowthEvent;
+
+#[derive(Default)]
+struct LastTailPosition(Option<Position>);
 
 impl Direction {
     fn opposite(self) -> Self {
@@ -40,7 +44,7 @@ struct Food;
 #[derive(Component)]
 struct SnakeSegment;
 
-#[derive(Default)]
+#[derive(Default, Deref, DerefMut)]
 struct SnakeSegments(Vec<Entity>);
 
 #[derive(Component, Clone, Copy, PartialEq, Eq, Debug)]
@@ -134,25 +138,41 @@ fn position_translation(windows: Res<Windows>, mut q: Query<(&Position, &mut Tra
     }
 }
 
-fn snake_movement(mut heads: Query<(&mut Position, &SnakeHead)>) {
-    if let Some((mut head_pos, head)) = heads.iter_mut().next() {
+fn snake_movement(
+    segments: ResMut<SnakeSegments>,
+    mut last_tail_position: ResMut<LastTailPosition>,
+    mut heads: Query<(Entity, &SnakeHead)>,
+    mut positions: Query<&mut Position>,
+) {
+    if let Some((head_entity, head)) = heads.iter_mut().next() {
+        let segment_positions = segments
+            .iter()
+            .map(|e| *positions.get_mut(*e).unwrap())
+            .collect::<Vec<Position>>();
+        let mut head_pos = positions.get_mut(head_entity).unwrap();
+
         match &head.direction {
             Direction::Left => {
                 head_pos.x -= 1;
             }
-
             Direction::Right => {
                 head_pos.x += 1;
             }
-
             Direction::Up => {
                 head_pos.y += 1;
             }
-
             Direction::Down => {
                 head_pos.y -= 1;
             }
-        }
+        };
+        segment_positions
+            .iter()
+            .zip(segments.iter().skip(1))
+            .for_each(|(pos, segment)| {
+                *positions.get_mut(*segment).unwrap() = *pos;
+            });
+
+        *last_tail_position = LastTailPosition(Some(*segment_positions.last().unwrap()));
     }
 }
 
@@ -172,6 +192,33 @@ fn snake_movement_input(keyboard_input: Res<Input<KeyCode>>, mut heads: Query<&m
 
         if dir != head.direction.opposite() {
             head.direction = dir;
+        }
+    }
+}
+
+fn snake_growth(
+    commands: Commands,
+    last_tail_position: Res<LastTailPosition>,
+    mut segments: ResMut<SnakeSegments>,
+    mut growth_reader: EventReader<GrowthEvent>,
+) {
+    if growth_reader.iter().next().is_some() {
+        segments.push(spawn_segment(commands, last_tail_position.0.unwrap()));
+    }
+}
+
+fn snake_eating(
+    mut commands: Commands,
+    mut growth_writer: EventWriter<GrowthEvent>,
+    food_positions: Query<(Entity, &Position), With<Food>>,
+    head_positions: Query<&Position, With<SnakeHead>>,
+) {
+    for head_pos in head_positions.iter() {
+        for (ent, food_pos) in food_positions.iter() {
+            if food_pos == head_pos {
+                commands.entity(ent).despawn();
+                growth_writer.send(GrowthEvent);
+            }
         }
     }
 }
@@ -200,12 +247,15 @@ fn main() {
             height: 500.0,
             ..Default::default()
         })
+        .add_event::<GrowthEvent>()
         .add_startup_system(setup_camera)
         .add_startup_system(spawn_snake)
         .insert_resource(SnakeSegments::default())
         .add_system_set(
             SystemSet::new()
                 .with_run_criteria(FixedTimestep::step(0.150))
+                .with_system(snake_eating.after(snake_movement))
+                .with_system(snake_growth.after(snake_eating))
                 .with_system(snake_movement),
         )
         .add_system_set(
@@ -219,6 +269,7 @@ fn main() {
                 .with_system(position_translation)
                 .with_system(size_scaling),
         )
+        .insert_resource(LastTailPosition::default())
         .add_system(snake_movement_input.before(snake_movement))
         .add_plugins(DefaultPlugins)
         .run()
