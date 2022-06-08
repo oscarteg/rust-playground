@@ -37,7 +37,13 @@ impl<T> Node<T> {
             right: None,
         }
     }
-    pub fn left(mut self, Node: Node<T>) -> Self {}
+    pub fn left(self, Node: Node<T>) -> Option<Box<Node<T>>> {
+        self.left
+    }
+
+    pub fn right(self, Node: Node<T>) -> Option<Box<Node<T>>> {
+        self.right
+    }
 }
 
 pub fn heap_sort(nums: &mut Vec<i32>, k: i32) {}

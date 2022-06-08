@@ -22,6 +22,7 @@
       <sourceFolder url="file://$MODULE_DIR$/type-driven-api/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rust-blockchain/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/bevy-snake/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/messenger/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/minigrep/target" />
       <excludeFolder url="file://$MODULE_DIR$/codeforces/target" />

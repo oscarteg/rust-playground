@@ -1,3 +1,6 @@
+mod higher_rank_trait_bounds;
+mod rust_is_hard;
+
 use rand::Rng;
 use std::cmp::Ordering;
 use std::fmt::Display;

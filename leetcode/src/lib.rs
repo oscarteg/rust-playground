@@ -1,13 +1,15 @@
-mod add_two_numbers;
-mod binary_search;
-mod first_bad_version;
-mod heap_sort;
-mod insertion_sort;
-mod pattern_defeating_quicksort;
-mod quicksort;
-mod rotate_array;
-mod search_insert_position;
-mod sorted_squares;
+pub mod add_two_numbers;
+pub mod binary_search;
+pub mod datastructures_1;
+pub mod first_bad_version;
+pub mod heap_sort;
+pub mod insertion_sort;
+pub mod move_zeroes;
+pub mod pattern_defeating_quicksort;
+pub mod quicksort;
+pub mod rotate_array;
+pub mod search_insert_position;
+pub mod sorted_squares;
 
 // Definition for singly-linked list.
 #[derive(PartialEq, Eq, Clone, Debug)]

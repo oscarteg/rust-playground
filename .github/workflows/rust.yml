@@ -10,9 +10,8 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-
+    name: Test
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         toolchain:

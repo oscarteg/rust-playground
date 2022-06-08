@@ -20,7 +20,8 @@ members = [
     "finance",
     "type-driven-api",
     "rust-blockchain",
-    "bevy-snake"
+    "bevy-snake",
+    "messenger"
 ]
 
 

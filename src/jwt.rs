@@ -1,18 +1,9 @@
 use crate::jwt::error::Error::WrongCredentialsError;
 use auth::{with_auth, Role};
-use chrono::prelude::*;
-use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::convert::Infallible;
-use std::fmt;
 use std::sync::Arc;
-use thiserror::Error;
-use warp::http::StatusCode;
-use warp::{
-    filters::header::headers_cloned,
-    http::header::{HeaderMap, HeaderValue, AUTHORIZATION},
-};
 use warp::{reject, reply, Filter, Rejection, Reply};
 
 type Result<T> = std::result::Result<T, error::Error>;
@@ -67,7 +58,6 @@ fn with_users(users: Users) -> impl Filter<Extract = (Users,), Error = Infallibl
     warp::any().map(move || users.clone())
 }
 
-
 pub async fn login_handler(users: Users, body: LoginRequest) -> WebResult<impl Reply> {
     match users
         .iter()
@@ -113,7 +103,6 @@ fn init_users() -> HashMap<String, User> {
     );
     map
 }
-
 
 mod error {
     use serde::Serialize;
@@ -182,12 +171,13 @@ mod error {
 }
 
 mod auth {
+    use std::fmt;
+
     use crate::jwt::error::Error;
     use crate::jwt::{Result, WebResult};
     use chrono::prelude::*;
     use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
     use serde::{Deserialize, Serialize};
-    use std::fmt;
     use warp::{
         filters::header::headers_cloned,
         http::header::{HeaderMap, HeaderValue, AUTHORIZATION},
@@ -210,10 +200,6 @@ mod auth {
                 _ => Role::User,
             }
         }
-    }
-
-    impl Diplay for Role {
-
     }
 
     impl fmt::Display for Role {
