@@ -1,3 +1,5 @@
+use std::ops::{Deref, DerefMut};
+
 use bevy::core::FixedTimestep;
 use bevy::prelude::*;
 use rand::prelude::random;
@@ -46,8 +48,22 @@ struct Food;
 #[derive(Component)]
 struct SnakeSegment;
 
-#[derive(Default, Deref, DerefMut)]
+#[derive(Default)]
 struct SnakeSegments(Vec<Entity>);
+
+impl DerefMut for SnakeSegments {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
+}
+
+impl Deref for SnakeSegments {
+    type Target = Vec<Entity>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
 
 #[derive(Component, Clone, Copy, PartialEq, Eq, Debug)]
 struct Position {
