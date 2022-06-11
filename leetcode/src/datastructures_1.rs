@@ -27,7 +27,9 @@ mod tests {
 
     /// Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
     /// Notice that the solution set must not contain duplicate triplets.
-    pub fn three_sums(nums: Vec<i32>) -> Vec<Vec<i32>> {}
+    pub fn three_sums(nums: Vec<i32>) -> Vec<Vec<i32>> {
+        return vec![vec![]];
+    }
 
     #[test]
     fn contains_dupe() {

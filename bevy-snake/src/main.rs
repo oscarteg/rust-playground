@@ -185,6 +185,7 @@ fn snake_movement(
             }
         };
 
+        // If snake hits
         if head_pos.x < 0
             || head_pos.y < 0
             || head_pos.x as u32 >= ARENA_WIDTH
