@@ -6,8 +6,6 @@ impl Solution {
     fn isBadVersion(&self, version: i32) -> bool {
         self.is_bad_version == version
     }
-    
-    
 
     pub fn first_bad_version(&self, n: i32) -> i32 {
         let mut low: i32 = 0;
