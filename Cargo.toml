@@ -21,7 +21,8 @@ members = [
     "type-driven-api",
     "rust-blockchain",
     "bevy-snake",
-    "messenger"
+    "messenger",
+    "sorting"
 ]
 
 

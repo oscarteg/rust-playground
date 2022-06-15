@@ -1,7 +1,7 @@
-use std::collections::{hash_map, BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, HashSet};
 
 pub fn most_common_word(paragraph: String, banned: Vec<String>) -> String {
-    let mut banset: HashSet<String> = HashSet::from_iter(banned);
+    let banset: HashSet<String> = HashSet::from_iter(banned);
 
     let mut freq = BTreeMap::new();
     let words = paragraph.split(|c: char| c.is_ascii_punctuation() || c.is_ascii_whitespace());
@@ -9,7 +9,7 @@ pub fn most_common_word(paragraph: String, banned: Vec<String>) -> String {
     for word in words {
         let word = word.to_ascii_lowercase();
 
-        if word == "" || banset.contains(&word) {
+        if word.is_empty() || banset.contains(&word) {
             continue;
         }
 
