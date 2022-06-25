@@ -1,9 +1,9 @@
-use std::collections::{BTreeMap, HashSet};
+use std::collections::{HashMap, HashSet};
 
 pub fn most_common_word(paragraph: String, banned: Vec<String>) -> String {
     let banset: HashSet<String> = HashSet::from_iter(banned);
 
-    let mut freq = BTreeMap::new();
+    let mut freq = HashMap::new();
     let words = paragraph.split(|c: char| c.is_ascii_punctuation() || c.is_ascii_whitespace());
 
     for word in words {

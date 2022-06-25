@@ -8,10 +8,11 @@ where
     }
 }
 
-fn heap_sort<T>(array: &mut [T])
+pub fn heap_sort<T>(array: &mut [T])
 where
     T: Ord,
 {
+    // Base case
     if array.len() <= 1 {
         return;
     }
@@ -24,7 +25,7 @@ where
     }
 }
 
-fn move_down<T>(array: &mut [T], mut root: usize)
+fn move_down<T>(array: &mut [T], root: usize)
 where
     T: Ord,
 {
@@ -66,5 +67,12 @@ mod tests {
         let mut array = vec![2, 4, 6, 1];
         heap_sort(&mut array);
         assert_eq!(&array, &[1, 2, 4, 6]);
+    }
+
+    #[test]
+    fn unsorted_array_characters() {
+        let mut array = vec!['g', 'd', 'o'];
+        heap_sort(&mut array);
+        assert_eq!(&array, &['d', 'g', 'o']);
     }
 }

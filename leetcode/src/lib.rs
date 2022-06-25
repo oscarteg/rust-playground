@@ -5,6 +5,7 @@ pub mod datastructures_1;
 pub mod first_bad_version;
 pub mod heap_sort;
 pub mod insertion_sort;
+pub mod lru_cache;
 pub mod move_zeroes;
 pub mod pattern_defeating_quicksort;
 pub mod quicksort;

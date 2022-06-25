@@ -1,3 +1,4 @@
+mod double_linked_list;
 mod higher_rank_trait_bounds;
 mod rust_is_hard;
 
