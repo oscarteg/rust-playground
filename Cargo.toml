@@ -20,9 +20,10 @@ members = [
     "finance",
     "type-driven-api",
     "rust-blockchain",
-    "bevy-snake",
     "messenger",
-    "sorting"
+    "sorting",
+    "vulkan-2d-game",
+    "bevy-game"
 ]
 
 

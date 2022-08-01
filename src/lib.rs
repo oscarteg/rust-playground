@@ -8,6 +8,7 @@ mod patterns;
 mod search;
 mod smart_pointers;
 mod traits;
+mod recursion;
 
 pub fn add_two(a: i32) -> i32 {
     internal_adder(a, 2)

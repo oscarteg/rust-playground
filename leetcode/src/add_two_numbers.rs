@@ -16,6 +16,24 @@ pub fn add_two_numbers(
 
 #[cfg(test)]
 mod tests {
+    use crate::ListNode;
+
     #[test]
-    fn it_works() {}
+    fn it_works() {
+        let l1: ListNode = ListNode {
+            val: 2,
+            next: Option(ListNode {
+                val: 4,
+                next: ListNode { val: 3, next: None },
+            }),
+        };
+
+        let l2: ListNode = ListNode {
+            val: 2,
+            next: Option(ListNode {
+                val: 4,
+                next: ListNode { val: 3, next: None },
+            }),
+        };
+    }
 }

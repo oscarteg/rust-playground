@@ -16,10 +16,10 @@ impl Summary for NewsArticle {
 }
 
 pub struct Tweet {
-    pub username: String,
-    pub content: String,
-    pub reply: bool,
-    pub retweet: bool,
+    username: String,
+    content: String,
+    reply: bool,
+    retweet: bool,
 }
 
 impl Summary for Tweet {

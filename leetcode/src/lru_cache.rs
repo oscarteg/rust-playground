@@ -22,18 +22,16 @@ impl LRUCache {
 
     fn get(&mut self, key: i32) -> i32 {
         if self.map.contains_key(&key) {
-            let i = self.dq.iter().position(|&x| x == key).unwrap();
-            self.dq.remove(i);
+            self.dq.retain(|&k| key != k);
             self.dq.push_front(key);
-            return self.map.get(&key).cloned().unwrap();
+            return *self.map.get(&key).unwrap();
         }
         -1
     }
 
     fn put(&mut self, key: i32, value: i32) {
         if self.map.contains_key(&key) {
-            let i = self.dq.iter().position(|&x| x == key).unwrap();
-            self.dq.remove(i);
+            self.dq.retain(|&k| key != k);
             self.dq.push_front(key);
             self.map.insert(key, value);
         } else {

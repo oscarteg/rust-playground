@@ -1,6 +1,10 @@
 mod double_linked_list;
 mod higher_rank_trait_bounds;
 mod rust_is_hard;
+mod tiny_traits;
+mod traits;
+
+mod web_scraping;
 
 use rand::Rng;
 use std::cmp::Ordering;

@@ -1,12 +1,14 @@
 # Summary
 
 # Key features
+
 - [Introduction](README.md)
 - [Ownership](ownership.md)
 - [Structs](structs.md)
 - [Enum](enum.md)
 
 # Hard topics
+
 - [Bitwise](./bitwise.md)
 - [Smart Pointers](smart-pointers/index.md)
   - [Box](smart-pointers/box.md)
@@ -17,4 +19,9 @@
 - [Concurrency](concurrency.md)
 
 # Algorithms
+
 - [Heap Sort](./algorithms/heap_sort.md)
+
+# Guide
+
+- [Error Handling](./error-handling.md)
