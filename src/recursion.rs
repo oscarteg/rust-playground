@@ -117,6 +117,6 @@ mod tests {
                 a: Box::new(ExprBoxed::LiteralInt { literal: 2 }),
                 b: Box::new(ExprBoxed::LiteralInt { literal: 3 }),
             }),
-        }
+        };
     }
 }
