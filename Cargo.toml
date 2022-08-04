@@ -23,7 +23,8 @@ members = [
     "messenger",
     "sorting",
     "vulkan-2d-game",
-    "bevy-game"
+    "bevy-game",
+    "chess"
 ]
 
 
