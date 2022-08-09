@@ -1,111 +1,152 @@
-//! Renders an animated sprite by loading all animation frames from a single image (a sprite sheet)
-//! into a texture atlas, and changing the displayed image periodically.
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+// Configure clippy for Bevy usage
+#![allow(clippy::type_complexity)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::too_many_lines)]
+#![allow(clippy::must_use_candidate)]
+#![allow(clippy::needless_pass_by_value)]
+#![allow(clippy::enum_glob_use)]
 
-use bevy::{input::keyboard::KeyboardInput, prelude::*, render::texture::ImageSettings};
-use gamestate::StatePlugin;
+use crate::states::GameState;
+use animation::CharacterAnimationResource;
+use bevy::prelude::*;
+use bevy::window::close_on_esc;
+use bevy::{app::AppExit, prelude::*, window::WindowMode};
+use bevy::{
+    asset::{AssetLoader, LoadContext, LoadedAsset},
+    reflect::TypeUuid,
+    utils::BoxedFuture,
+};
+use bevy_rapier2d::na::Vector2;
+use bevy_rapier2d::prelude::*;
+use rand::Rng;
+use rapier2d::math::Vector;
+use ron::de::from_bytes;
+use serde::Deserialize;
 
-mod collision;
+mod animation;
 mod gamestate;
 mod menu;
-mod physics;
+mod player;
+mod states;
 
-/// player component
-#[derive(Component)]
-struct Player {
-    /// linear speed in meters per second
-    movement_speed: f32,
+#[cfg(debug_assertions)]
+//use bevy_inspector_egui::WorldInspectorPlugin;
+fn main() {
+    let mut app = App::new();
+
+    app.insert_resource(WindowDescriptor {
+        width: 800.0,
+        height: 600.0,
+        title: "RustyJam".to_string(),
+        mode: WindowMode::Windowed,
+        resizable: false,
+        ..Default::default()
+    })
+    .add_plugins(DefaultPlugins)
+    .init_asset_loader::<CustomAssetLoader>()
+    .add_plugin(ApartmentPlugin)
+    .add_state(GameState::MainMenu)
+    .add_system(close_on_esc);
+
+    app.run();
 }
 
-struct Movement {
-    movement_speed: f32,
+pub struct ApartmentPlugin;
+
+pub const BACKGROUND_Z: f32 = 0.0;
+pub const HALLWAY_COVER_Z: f32 = 1.0;
+pub const PLAYER_IN_BED_Z: f32 = 2.0;
+pub const PIZZA_Z: f32 = 2.0;
+pub const NPC_Z: f32 = 4.0;
+pub const PLAYER_Z: f32 = 5.0;
+pub const FOREGROUND_Z: f32 = 10.0;
+pub const INTERACTABLE_ICON_Z: f32 = 11.0;
+pub const LIGHTING_Z: f32 = 10.5;
+pub const PEEPHOLE_Z: f32 = 10.2;
+
+impl Plugin for ApartmentPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
+            .add_plugin(RapierDebugRenderPlugin::default())
+            // .add_system(print_on_load)
+            .add_system_set(
+                SystemSet::on_enter(GameState::MainGame)
+                    .with_system(setup.label("apartment_setup"))
+                    .with_system(player::spawn_player.after("apartment_setup")),
+            )
+            .add_system_set(
+                SystemSet::on_update(GameState::MainGame)
+                    .with_system(player::player_movement_system.label("player_movement"))
+                    .with_system(
+                        player::set_player_animation_system
+                            .after("player_movement")
+                            .label("set_player_animation"),
+                    ),
+            );
+
+        app.add_system(animation::basic_sprite_animation_system);
+        app.add_system(animation::animate_character_system.after("set_player_animation"));
+    }
 }
 
 #[derive(Default)]
-struct CollisionEvent;
+pub struct CustomAssetLoader;
 
-fn main() {
-    App::new()
-        .insert_resource(ImageSettings::default_nearest()) // prevents blurry sprites
-        .add_plugin(StatePlugin)
-        .add_plugins(DefaultPlugins)
-        .add_startup_system(setup)
-        .add_system_set(
-            SystemSet::new()
-                .with_system(print_keyboard_event_system)
-                .with_system(animate_player)
-                .with_system(player_movement_system),
-        )
-        .add_system(bevy::window::close_on_esc)
-        .run();
+impl AssetLoader for CustomAssetLoader {
+    fn load<'a>(
+        &'a self,
+        bytes: &'a [u8],
+        load_context: &'a mut LoadContext,
+    ) -> BoxedFuture<'a, Result<(), bevy::asset::Error>> {
+        Box::pin(async move {
+            let custom_asset = ron::de::from_bytes::<CharacterAnimationResource>(bytes)?;
+            load_context.set_default_asset(LoadedAsset::new(custom_asset));
+            Ok(())
+        })
+    }
+
+    fn extensions(&self) -> &[&str] {
+        &["ron"]
+    }
 }
 
+/// Setup physics, camera, background, foreground, walls
 fn setup(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,
+    mut rapier_config: ResMut<RapierConfiguration>,
 ) {
-    let texture_handle = asset_server.load("textures/rpg/chars/gabe/gabe-idle-run.png");
-    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(24.0, 24.0), 7, 1);
-    let texture_atlas_handle = texture_atlases.add(texture_atlas);
+    // setup rapier
+    rapier_config.gravity = Vec2 { x: 0.0, y: 0.0 };
+
+    rapier_config.scaled_shape_subdivision = 10;
+
+    // create camera
     commands.spawn_bundle(Camera2dBundle::default());
 
+    // create background
+    //let texture_handle = asset_server.load("textures/apartment_background.png");
     commands
-        .spawn_bundle(SpriteSheetBundle {
-            texture_atlas: texture_atlas_handle,
-            transform: Transform::from_scale(Vec3::splat(6.0)),
-            ..default()
+        .spawn()
+        .insert_bundle(SpriteBundle {
+            texture: asset_server.load("level.png"),
+            transform: Transform::from_translation(Vec3::new(0.0, 0.0, BACKGROUND_Z)),
+            ..Default::default()
         })
-        .insert(AnimationTimer(Timer::from_seconds(0.1, true)))
-        .insert(Player {
-            movement_speed: 1000.0,
-        });
+        .insert(Name::new("Background"));
 }
 
-#[derive(Component, Deref, DerefMut)]
-struct AnimationTimer(Timer);
-
-fn animate_player(
-    time: Res<Time>,
-    texture_atlases: Res<Assets<TextureAtlas>>,
-    mut query: Query<(
-        &mut AnimationTimer,
-        &mut TextureAtlasSprite,
-        &Handle<TextureAtlas>,
-    )>,
-) {
-    info!("Animate sprite");
-    for (mut timer, mut sprite, texture_atlas_handle) in &mut query {
-        timer.tick(time.delta());
-        if timer.just_finished() {
-            let texture_atlas = texture_atlases.get(texture_atlas_handle).unwrap();
-            sprite.index = (sprite.index + 1) % texture_atlas.textures.len();
-        }
-    }
-}
-
-fn player_movement_system(
-    keyboard_input: Res<Input<KeyCode>>,
-    mut query: Query<&mut Transform, With<Player>>,
-) {
-    let mut player_transform = query.single_mut();
-    let mut direction = 0.0;
-
-    if keyboard_input.pressed(KeyCode::Left) {
-        direction -= 1.0;
-    }
-
-    if keyboard_input.pressed(KeyCode::Right) {
-        direction += 1.0;
-    }
-
-    // Calculate the new horizontal paddle position based on player input
-    let new_player_position = player_transform.translation.x + direction;
-
-    player_transform.translation.x = new_player_position
-}
-
-fn print_keyboard_event_system(mut keyboard_input_events: EventReader<KeyboardInput>) {
-    keyboard_input_events
-        .iter()
-        .for_each(|event| info!("{:?}", event))
-}
+// fn print_on_load(
+//     mut state: ResMut<State>,
+//     custom_assets: ResMut<Assets<CharacterAnimationResource>>,
+// ) {
+//     let custom_asset = custom_assets.get(&state.handle);
+//     if state.printed || custom_asset.is_none() {
+//         return;
+//     }
+//
+//     info!("Custom asset loaded: {:?}", custom_asset.unwrap());
+//     state.printed = true;
+// }

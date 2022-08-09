@@ -7,6 +7,10 @@ edition = "2021"
 
 [dependencies]
 bevy = "0.8.0"
+bevy_rapier2d = "0.16.0"
 rand = "0.8.5"
 core-foundation = "0.9.3"
 rapier2d = "0.14.0"
+serde = "1.0.142"
+ron = "0.7.1"
+anyhow = "1.0.60"
