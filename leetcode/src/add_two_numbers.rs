@@ -22,18 +22,18 @@ mod tests {
     fn it_works() {
         let l1: ListNode = ListNode {
             val: 2,
-            next: Option(ListNode {
+            next: Some(Box::new(ListNode {
                 val: 4,
-                next: ListNode { val: 3, next: None },
-            }),
+                next: Some(Box::new(ListNode { val: 3, next: None })),
+            })),
         };
 
         let l2: ListNode = ListNode {
             val: 2,
-            next: Option(ListNode {
+            next: Some(Box::new(ListNode {
                 val: 4,
-                next: ListNode { val: 3, next: None },
-            }),
+                next: Some(Box::new(ListNode { val: 3, next: None })),
+            })),
         };
     }
 }

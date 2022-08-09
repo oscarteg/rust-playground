@@ -2,6 +2,7 @@ pub mod add_two_numbers;
 pub mod banned_words;
 pub mod binary_search;
 pub mod datastructures_1;
+pub mod decode_xor_array;
 pub mod first_bad_version;
 pub mod heap_sort;
 pub mod insertion_sort;

@@ -41,6 +41,7 @@ mod tests {
         assert!(!contains_duplicate(vec![1, 2, 3]));
     }
 
+    #[ignore]
     #[test]
     fn contains_three_sums() {
         let nums = vec![-1, 0, 1, 2, -1, -4];
