@@ -24,7 +24,8 @@ members = [
     "sorting",
     "vulkan-2d-game",
     "bevy-game",
-    "chess"
+    "chess",
+    "webserver"
 ]
 
 
