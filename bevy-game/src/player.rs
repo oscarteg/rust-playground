@@ -56,31 +56,6 @@ pub fn spawn_player(
         })
         .insert(RigidBody::Dynamic)
         .insert_bundle(TransformBundle::from(Transform::from_xyz(10.0, 0.0, 0.0)));
-    // .insert_bundle()
-    // .insert_bundle(RigidBody::Dynamic {
-    //     body_type: RigidBodyType::Dynamic.into(),
-    //     mass_properties: RigidBodyMassPropsFlags::ROTATION_LOCKED.into(),
-    //     position: Vec2::new(10.0, 0.0).into(),
-    //     ..Default::default()
-    // })
-    // .insert_bundle((
-    //     RigidBodyPositionSync::Discrete,
-    //     Name::new("Player"),
-    //     PlayerComponent { speed: 1.5 },
-    // ))
-    // .with_children(|parent| {
-    //     parent.spawn().insert_bundle(ColliderBundle {
-    //         shape: ColliderShape::cuboid(3.0, 1.0).into(),
-    //         position: Vec2::new(0.0, -3.8).into(),
-    //         material: ColliderMaterial {
-    //             friction: 0.0,
-    //             restitution: 0.0,
-    //             ..Default::default()
-    //         }
-    //         .into(),
-    //         ..Default::default()
-    //     });
-    // });
 }
 
 /// Set the player's animation based on what the player is doing
@@ -157,7 +132,7 @@ pub fn set_player_animation_system(
 // Move player by modifying velocity with input
 pub fn player_movement_system(
     keyboard_input: Res<Input<KeyCode>>,
-    rapier_config: Res<RapierConfiguration>,
+    // rapier_config: Res<RapierConfiguration>,
     mut player_info: Query<(&PlayerComponent, &mut Velocity)>,
     app_state: Res<State<GameState>>,
 ) {
@@ -180,8 +155,8 @@ pub fn player_movement_system(
         // handle movement in x direction
         if x_axis != 0 {
             // accelerate to the player's maximum speed stat
-            rb_vels.linvel.x =
-                player.speed * (x_axis as f32) * rapier_config.scaled_shape_subdivision as f32;
+            // rb_vels.linvel.x =
+            // player.speed * (x_axis as f32) * rapier_config.scaled_shape_subdivision as f32;
         } else {
             rb_vels.linvel.x = 0.0;
         }
@@ -189,8 +164,8 @@ pub fn player_movement_system(
         // handle movement in y direction
         if y_axis != 0 {
             // accelerate to the player's maximum speed stat
-            rb_vels.linvel.y =
-                player.speed * (y_axis as f32) * rapier_config.scaled_shape_subdivision as f32;
+            // rb_vels.linvel.y =
+            //     player.speed * (y_axis as f32) * rapier_config.scaled_shape_subdivision as f32;
         } else {
             rb_vels.linvel.y = 0.0;
         }

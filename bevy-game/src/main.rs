@@ -1,4 +1,3 @@
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 // Configure clippy for Bevy usage
 #![allow(clippy::type_complexity)]
 #![allow(clippy::too_many_arguments)]
@@ -9,7 +8,11 @@
 
 use crate::states::GameState;
 use animation::CharacterAnimationResource;
+use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
+use bevy::ecs::archetype::Archetypes;
+use bevy::ecs::component::Components;
 use bevy::prelude::*;
+use bevy::render::camera::RenderTarget;
 use bevy::window::close_on_esc;
 use bevy::{app::AppExit, prelude::*, window::WindowMode};
 use bevy::{
@@ -17,6 +20,7 @@ use bevy::{
     reflect::TypeUuid,
     utils::BoxedFuture,
 };
+use bevy_common_assets::ron::RonAssetPlugin;
 use bevy_rapier2d::na::Vector2;
 use bevy_rapier2d::prelude::*;
 use rand::Rng;
@@ -40,36 +44,33 @@ fn main() {
         height: 600.0,
         title: "RustyJam".to_string(),
         mode: WindowMode::Windowed,
-        resizable: false,
+        resizable: true,
         ..Default::default()
     })
+    .add_startup_system(setup)
     .add_plugins(DefaultPlugins)
-    .init_asset_loader::<CustomAssetLoader>()
-    .add_plugin(ApartmentPlugin)
+    .add_plugin(LogDiagnosticsPlugin::default())
+    .add_plugin(FrameTimeDiagnosticsPlugin::default())
+    // .add_plugin(PlayerPlugin)
     .add_state(GameState::MainMenu)
     .add_system(close_on_esc);
 
     app.run();
 }
 
-pub struct ApartmentPlugin;
+pub struct PlayerPlugin;
 
 pub const BACKGROUND_Z: f32 = 0.0;
-pub const HALLWAY_COVER_Z: f32 = 1.0;
-pub const PLAYER_IN_BED_Z: f32 = 2.0;
-pub const PIZZA_Z: f32 = 2.0;
-pub const NPC_Z: f32 = 4.0;
 pub const PLAYER_Z: f32 = 5.0;
-pub const FOREGROUND_Z: f32 = 10.0;
-pub const INTERACTABLE_ICON_Z: f32 = 11.0;
-pub const LIGHTING_Z: f32 = 10.5;
-pub const PEEPHOLE_Z: f32 = 10.2;
 
-impl Plugin for ApartmentPlugin {
+impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
             .add_plugin(RapierDebugRenderPlugin::default())
+            .add_plugin(RonAssetPlugin::<CharacterAnimationResource>::new(&["ron"]))
             // .add_system(print_on_load)
+            .add_system(animation::basic_sprite_animation_system)
+            .add_system(animation::animate_character_system.after("set_player_animation"))
             .add_system_set(
                 SystemSet::on_enter(GameState::MainGame)
                     .with_system(setup.label("apartment_setup"))
@@ -83,31 +84,12 @@ impl Plugin for ApartmentPlugin {
                             .after("player_movement")
                             .label("set_player_animation"),
                     ),
+            )
+            .add_system_set(
+                SystemSet::on_enter(GameState::MainGame)
+                    .with_system(setup.label("apartment_setup"))
+                    .with_system(player::spawn_player.after("apartment_setup")),
             );
-
-        app.add_system(animation::basic_sprite_animation_system);
-        app.add_system(animation::animate_character_system.after("set_player_animation"));
-    }
-}
-
-#[derive(Default)]
-pub struct CustomAssetLoader;
-
-impl AssetLoader for CustomAssetLoader {
-    fn load<'a>(
-        &'a self,
-        bytes: &'a [u8],
-        load_context: &'a mut LoadContext,
-    ) -> BoxedFuture<'a, Result<(), bevy::asset::Error>> {
-        Box::pin(async move {
-            let custom_asset = ron::de::from_bytes::<CharacterAnimationResource>(bytes)?;
-            load_context.set_default_asset(LoadedAsset::new(custom_asset));
-            Ok(())
-        })
-    }
-
-    fn extensions(&self) -> &[&str] {
-        &["ron"]
     }
 }
 
@@ -116,18 +98,20 @@ fn setup(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut materials: ResMut<Assets<ColorMaterial>>,
-    mut rapier_config: ResMut<RapierConfiguration>,
+    // mut rapier_config: ResMut<RapierConfiguration>,
 ) {
     // setup rapier
-    rapier_config.gravity = Vec2 { x: 0.0, y: 0.0 };
+    // rapier_config.gravity = Vec2 { x: 0.0, y: 0.0 };
+    // rapier_config.scaled_shape_subdivision = 10;
 
-    rapier_config.scaled_shape_subdivision = 10;
+    // Add player resource
+    let handle: Handle<CharacterAnimationResource> = asset_server.load("data/player.ron");
+    commands.insert_resource(handle);
 
     // create camera
     commands.spawn_bundle(Camera2dBundle::default());
 
     // create background
-    //let texture_handle = asset_server.load("textures/apartment_background.png");
     commands
         .spawn()
         .insert_bundle(SpriteBundle {
@@ -138,15 +122,15 @@ fn setup(
         .insert(Name::new("Background"));
 }
 
-// fn print_on_load(
-//     mut state: ResMut<State>,
-//     custom_assets: ResMut<Assets<CharacterAnimationResource>>,
-// ) {
-//     let custom_asset = custom_assets.get(&state.handle);
-//     if state.printed || custom_asset.is_none() {
-//         return;
-//     }
-//
-//     info!("Custom asset loaded: {:?}", custom_asset.unwrap());
-//     state.printed = true;
-// }
+fn print_resources(archetypes: &Archetypes, components: &Components) {
+    let mut r: Vec<_> = archetypes
+        .resource()
+        .components()
+        .map(|id| components.get_info(id).unwrap())
+        .map(|info| info.name())
+        .collect();
+
+    // sort list alphebetically
+    r.sort();
+    r.iter().for_each(|name| println!("{}", name));
+}

@@ -54,7 +54,7 @@ pub fn animate_character_system(
 }
 
 /// Stores data about character animations frames (data/character_animations.ron)
-#[derive(Debug, Deserialize, TypeUuid)]
+#[derive(Default, Debug, Deserialize, TypeUuid)]
 #[uuid = "39cadc56-aa9c-4543-8640-a018b74b5052"]
 pub struct CharacterAnimationResource {
     // start and end indexes of animations

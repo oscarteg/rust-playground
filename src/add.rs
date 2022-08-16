@@ -1,0 +1,1 @@
+struct Counter {}
