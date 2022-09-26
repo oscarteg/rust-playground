@@ -1,7 +1,7 @@
-use bevy::{prelude::*, reflect::TypeUuid};
-use rand::Rng;
-use serde::Deserialize;
 use std::collections::HashMap;
+
+use bevy::{prelude::*, reflect::TypeUuid};
+use serde::Deserialize;
 
 /// Tag for basic (1 row) animation
 #[derive(Component)]
@@ -61,17 +61,24 @@ pub struct CharacterAnimationResource {
     pub animations: HashMap<CharacterAnimationType, (u32, u32, f32)>,
 }
 
+/// Used for tracking animations of a character entity
+#[derive(Component)]
+pub struct CharacterAnimationComponent {
+    pub timer: AnimationTimer,
+    pub animation_type: CharacterAnimationType,
+}
+
 /// Types of character animations
 #[derive(Deserialize, Debug, Hash, PartialEq, Eq, Clone)]
 pub enum CharacterAnimationType {
     ForwardIdle,
-    LeftIdle,
-    BackwardIdle,
-    RightIdle,
     ForwardMove,
+    LeftIdle,
     LeftMove,
-    BackwardMove,
+    RightIdle,
     RightMove,
+    BackwardIdle,
+    BackwardMove,
 }
 
 impl CharacterAnimationType {
@@ -86,9 +93,3 @@ impl CharacterAnimationType {
     }
 }
 
-/// Used for tracking animations of a character entity
-#[derive(Component)]
-pub struct CharacterAnimationComponent {
-    pub timer: AnimationTimer,
-    pub animation_type: CharacterAnimationType,
-}

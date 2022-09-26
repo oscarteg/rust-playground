@@ -1,10 +1,8 @@
-use std::borrow::{Borrow, BorrowMut};
-use std::collections::HashMap;
 use bevy::prelude::*;
 use bevy::render::texture::ImageSettings;
 use bevy_common_assets::ron::RonAssetPlugin;
 use bevy_rapier2d::prelude::*;
-use rapier2d::prelude::RigidBodyType;
+
 use crate::animation::*;
 use crate::gamestate::AppState;
 
@@ -22,13 +20,16 @@ pub struct PlayerPlugin;
 
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup);
         app.insert_resource(ImageSettings::default_nearest());
-        app.add_plugin(RonAssetPlugin::<CharacterAnimationResource>::new(&["ron"]));
-        app.add_system(spawn_player);
+        app.add_startup_system(setup);
 
         // app.add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
         //     .add_plugin(RapierDebugRenderPlugin::default());
+        app.add_plugin(RonAssetPlugin::<CharacterAnimationResource>::new(&["ron"]));
+        app.add_system_set(SystemSet::on_enter(AppState::InGame).with_system(spawn_player));
+        // app.add_system_set(SystemSet::on_enter(AppState::InGame).with_system(spawn_player));
+        app.add_system(animate_sprite);
+
         // app.add_system_set(
         //     SystemSet::new()
         //         .with_system(basic_sprite_animation_system)
@@ -37,55 +38,58 @@ impl Plugin for PlayerPlugin {
     }
 }
 
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut texture_atlases: ResMut<Assets<TextureAtlas>>) {
     // Add player resource
     let handle: Handle<CharacterAnimationResource> = asset_server.load("data/player.ron");
     commands.insert_resource(handle);
 
-    let texture_handle: Handle<Image> = asset_server.load("player.png");
-    commands.insert_resource(texture_handle);
+    let texture_handle = asset_server.load("player.png");
+    let texture_atlas = TextureAtlas::from_grid_with_padding(texture_handle, Vec2::new(48.0, 69.0), 7, 1, Vec2::ZERO, Vec2::new(50.0, 27.0));
+    let texture_atlas_handle = texture_atlases.add(texture_atlas);
+
+    // commands
+    //     .spawn()
+    //     .insert(PlayerComponent { speed: 1.5 })
+    //     .insert(RigidBody::Dynamic);
+    commands
+        .spawn_bundle(SpriteSheetBundle {
+            texture_atlas: texture_atlas_handle,
+            // transform: Transform::from_translation(Vec3::new(0.0, 0.0, 1.0)),
+            transform: Transform::from_translation(Vec3::splat(1.0)),
+            ..default()
+        })
+        .insert(AnimationTimer(Timer::from_seconds(0.1, true)));
 }
 
 /// Spawns a player
 pub fn spawn_player(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    texture_handle: Res<Handle<CharacterAnimationResource>>,
     character_animations: Res<Handle<CharacterAnimationResource>>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
 ) {
     // spawn player
-    let character_starting_animation = CharacterAnimationType::ForwardIdle;
-    // let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(32.0, 46.0), 6, 8);
-    // let texture_atlas_handle = texture_atlases.add(texture_atlas);
+    let texture_handle = asset_server.load("player.png");
+    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(32.0, 46.0), 6, 8);
+    let texture_atlas_handle = texture_atlases.add(texture_atlas);
+}
 
-    let sprite_transform = Transform {
-        translation: Vec3::new(0.0, 0.0, PLAYER_Z),
-        scale: Vec3::new(PLAYER_SPRITE_SCALE, PLAYER_SPRITE_SCALE, 0.0),
-        ..Default::default()
-    };
-
-    commands
-        .spawn()
-        .insert(PlayerComponent { speed: 1.5 })
-        // .insert(CharacterAnimationComponent {
-        //     timer: AnimationTimer(Timer::from_seconds(
-        //         character_animations.animations[&character_starting_animation].2,
-        //         true,
-        //     )),
-        //     animation_type: character_starting_animation.clone(),
-        // })
-        // .insert_bundle(SpriteSheetBundle {
-        //     texture_atlas: texture_atlas_handle,
-        //     transform: sprite_transform,
-        //     sprite: TextureAtlasSprite {
-        //         index: character_animations.animations[&character_starting_animation].0 as usize,
-        //         ..Default::default()
-        //     },
-        //     ..Default::default()
-        // })
-        .insert(RigidBody::Dynamic)
-        .insert_bundle(TransformBundle::from(Transform::from_xyz(10.0, 0.0, 0.0)));
+fn animate_sprite(
+    time: Res<Time>,
+    texture_atlases: Res<Assets<TextureAtlas>>,
+    mut query: Query<(
+        &mut AnimationTimer,
+        &mut TextureAtlasSprite,
+        &Handle<TextureAtlas>,
+    )>,
+) {
+    for (mut timer, mut sprite, texture_atlas_handle) in &mut query {
+        timer.tick(time.delta());
+        if timer.just_finished() {
+            let texture_atlas = texture_atlases.get(texture_atlas_handle).unwrap();
+            sprite.index = (sprite.index + 1) % texture_atlas.textures.len();
+        }
+    }
 }
 
 /// Set the player's animation based on what the player is doing
