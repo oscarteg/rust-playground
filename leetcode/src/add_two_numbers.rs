@@ -1,15 +1,15 @@
+#![allow(dead_code)]
+
 use crate::ListNode;
 
 /// Add two numbers from a linked list
 pub fn add_two_numbers(
-    l1: Option<Box<ListNode>>,
-    l2: Option<Box<ListNode>>,
+    left: Option<Box<ListNode>>,
+    right: Option<Box<ListNode>>,
 ) -> Option<Box<ListNode>> {
-    let mut l1_current = l1;
-    let mut l2_current = l2;
-
-    while l1_current.is_some() && l2_current.is_some() {}
-    let list = ListNode::new(12);
+    let dummy_head = ListNode::new(0);
+    let curr = &dummy_head;
+    let mut carry = 0;
 
     None
 }
@@ -18,22 +18,34 @@ pub fn add_two_numbers(
 mod tests {
     use crate::ListNode;
 
+    use super::add_two_numbers;
+
     #[test]
     fn it_works() {
-        let l1: ListNode = ListNode {
+        let l1: Option<Box<ListNode>> = Some(Box::new(ListNode {
             val: 2,
             next: Some(Box::new(ListNode {
                 val: 4,
                 next: Some(Box::new(ListNode { val: 3, next: None })),
             })),
-        };
+        }));
 
-        let l2: ListNode = ListNode {
+        let l2: Option<Box<ListNode>> = Some(Box::new(ListNode {
             val: 2,
             next: Some(Box::new(ListNode {
                 val: 4,
                 next: Some(Box::new(ListNode { val: 3, next: None })),
             })),
-        };
+        }));
+
+        let l3: Option<Box<ListNode>> = Some(Box::new(ListNode {
+            val: 6,
+            next: Some(Box::new(ListNode {
+                val: 8,
+                next: Some(Box::new(ListNode { val: 6, next: None })),
+            })),
+        }));
+
+        assert_eq!(add_two_numbers(l1, l2), l3);
     }
 }

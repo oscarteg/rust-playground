@@ -1,3 +1,5 @@
+use std::ops::Add;
+
 pub trait Summary {
     fn summarize(&self) -> String;
 }
@@ -35,6 +37,19 @@ where
     item.summarize();
 
     item
+}
+
+#[derive(Debug, PartialEq)]
+struct Counter {
+    value: i32,
+}
+
+impl Add for Counter {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Self { value: rhs.value }
+    }
 }
 
 #[test]

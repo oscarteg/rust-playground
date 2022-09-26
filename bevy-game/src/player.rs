@@ -1,14 +1,15 @@
+use std::borrow::{Borrow, BorrowMut};
+use std::collections::HashMap;
 use bevy::prelude::*;
+use bevy::render::texture::ImageSettings;
+use bevy_common_assets::ron::RonAssetPlugin;
 use bevy_rapier2d::prelude::*;
 use rapier2d::prelude::RigidBodyType;
+use crate::animation::*;
+use crate::gamestate::AppState;
 
-use crate::animation::{
-    AnimationTimer, CharacterAnimationComponent, CharacterAnimationResource, CharacterAnimationType,
-};
-
-use crate::{states::GameState, PLAYER_Z};
-
-pub const PLAYER_SPRITE_SCALE: f32 = 2.0;
+const PLAYER_SPRITE_SCALE: f32 = 2.0;
+const PLAYER_Z: f32 = 5.0;
 
 /// Stores core attributes of player
 #[derive(Debug, Component)]
@@ -16,18 +17,47 @@ pub struct PlayerComponent {
     pub speed: f32,
 }
 
+// Start of the plugin
+pub struct PlayerPlugin;
+
+impl Plugin for PlayerPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_startup_system(setup);
+        app.insert_resource(ImageSettings::default_nearest());
+        app.add_plugin(RonAssetPlugin::<CharacterAnimationResource>::new(&["ron"]));
+        app.add_system(spawn_player);
+
+        // app.add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
+        //     .add_plugin(RapierDebugRenderPlugin::default());
+        // app.add_system_set(
+        //     SystemSet::new()
+        //         .with_system(basic_sprite_animation_system)
+        //         .with_system(animate_character_system.after("set_player_animation")),
+        // );
+    }
+}
+
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+    // Add player resource
+    let handle: Handle<CharacterAnimationResource> = asset_server.load("data/player.ron");
+    commands.insert_resource(handle);
+
+    let texture_handle: Handle<Image> = asset_server.load("player.png");
+    commands.insert_resource(texture_handle);
+}
+
 /// Spawns a player
 pub fn spawn_player(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    character_animations: Res<CharacterAnimationResource>,
+    texture_handle: Res<Handle<CharacterAnimationResource>>,
+    character_animations: Res<Handle<CharacterAnimationResource>>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
 ) {
     // spawn player
     let character_starting_animation = CharacterAnimationType::ForwardIdle;
-    let texture_handle = asset_server.load("player.png");
-    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(32.0, 46.0), 6, 8);
-    let texture_atlas_handle = texture_atlases.add(texture_atlas);
+    // let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(32.0, 46.0), 6, 8);
+    // let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
     let sprite_transform = Transform {
         translation: Vec3::new(0.0, 0.0, PLAYER_Z),
@@ -38,22 +68,22 @@ pub fn spawn_player(
     commands
         .spawn()
         .insert(PlayerComponent { speed: 1.5 })
-        .insert(CharacterAnimationComponent {
-            timer: AnimationTimer(Timer::from_seconds(
-                character_animations.animations[&character_starting_animation].2,
-                true,
-            )),
-            animation_type: character_starting_animation.clone(),
-        })
-        .insert_bundle(SpriteSheetBundle {
-            texture_atlas: texture_atlas_handle,
-            transform: sprite_transform,
-            sprite: TextureAtlasSprite {
-                index: character_animations.animations[&character_starting_animation].0 as usize,
-                ..Default::default()
-            },
-            ..Default::default()
-        })
+        // .insert(CharacterAnimationComponent {
+        //     timer: AnimationTimer(Timer::from_seconds(
+        //         character_animations.animations[&character_starting_animation].2,
+        //         true,
+        //     )),
+        //     animation_type: character_starting_animation.clone(),
+        // })
+        // .insert_bundle(SpriteSheetBundle {
+        //     texture_atlas: texture_atlas_handle,
+        //     transform: sprite_transform,
+        //     sprite: TextureAtlasSprite {
+        //         index: character_animations.animations[&character_starting_animation].0 as usize,
+        //         ..Default::default()
+        //     },
+        //     ..Default::default()
+        // })
         .insert(RigidBody::Dynamic)
         .insert_bundle(TransformBundle::from(Transform::from_xyz(10.0, 0.0, 0.0)));
 }
@@ -134,10 +164,10 @@ pub fn player_movement_system(
     keyboard_input: Res<Input<KeyCode>>,
     // rapier_config: Res<RapierConfiguration>,
     mut player_info: Query<(&PlayerComponent, &mut Velocity)>,
-    app_state: Res<State<GameState>>,
+    app_state: Res<State<AppState>>,
 ) {
     // if we are not playing the game prevent the player from moving
-    if app_state.current() != &GameState::MainGame {
+    if app_state.current() != &AppState::InGame {
         return;
     }
 

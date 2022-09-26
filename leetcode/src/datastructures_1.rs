@@ -28,7 +28,7 @@ mod tests {
     /// Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
     /// Notice that the solution set must not contain duplicate triplets.
     pub fn three_sums(nums: Vec<i32>) -> Vec<Vec<i32>> {
-        return vec![vec![]];
+        vec![vec![]]
     }
 
     #[test]
@@ -47,5 +47,12 @@ mod tests {
         let nums = vec![-1, 0, 1, 2, -1, -4];
 
         assert!(three_sums(nums) == vec![vec![-1, -1, 2], vec![-1, 0, 1]]);
+    }
+
+    #[test]
+    fn max_sub_array_test() {
+        let nums = vec![-2, 1, -3, 4, -1, 2, 1, -5, 4];
+
+        assert_eq!(max_sub_array(nums), 6);
     }
 }
