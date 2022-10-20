@@ -1,99 +1,111 @@
+use std::any::{Any, TypeId};
+use std::borrow::Borrow;
+use std::thread::spawn;
+
 use bevy::prelude::*;
 use bevy::render::texture::ImageSettings;
 use bevy_common_assets::ron::RonAssetPlugin;
 use bevy_rapier2d::prelude::*;
+use rapier2d::prelude::{
+    ColliderFlags, ColliderShape, RigidBodyActivation, RigidBodyCcd, RigidBodyMassProps,
+    RigidBodyVelocity,
+};
 
 use crate::animation::*;
 use crate::gamestate::AppState;
 
-const PLAYER_SPRITE_SCALE: f32 = 2.0;
-const PLAYER_Z: f32 = 5.0;
+pub const PLAYER_Z: f32 = 5.0;
+pub const PLAYER_SPRITE_WIDTH: f32 = 48.0;
+pub const PLAYER_SPRITE_HEIGHT: f32 = 69.0;
 
 /// Stores core attributes of player
 #[derive(Debug, Component)]
-pub struct PlayerComponent {
-    pub speed: f32,
+pub struct Player {
+    pub velocity: f32,
+    pub speed: Velocity,
 }
 
 // Start of the plugin
 pub struct PlayerPlugin;
 
+
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(ImageSettings::default_nearest());
         app.add_startup_system(setup);
-
-        // app.add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
-        //     .add_plugin(RapierDebugRenderPlugin::default());
+        // app.add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
+        app.add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
+            .add_plugin(RapierDebugRenderPlugin::default());
         app.add_plugin(RonAssetPlugin::<CharacterAnimationResource>::new(&["ron"]));
         app.add_system_set(SystemSet::on_enter(AppState::InGame).with_system(spawn_player));
-        // app.add_system_set(SystemSet::on_enter(AppState::InGame).with_system(spawn_player));
-        app.add_system(animate_sprite);
-
-        // app.add_system_set(
-        //     SystemSet::new()
-        //         .with_system(basic_sprite_animation_system)
-        //         .with_system(animate_character_system.after("set_player_animation")),
-        // );
+        // app.add_system_set(SystemSet::on_update(AppState::InGame).with_system(spawn_player));
+        app.add_system_set(
+            SystemSet::on_update(AppState::InGame).with_system(player_movement_system),
+        );
     }
 }
 
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut texture_atlases: ResMut<Assets<TextureAtlas>>) {
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>, mut rapier_config: ResMut<RapierConfiguration>) {
     // Add player resource
     let handle: Handle<CharacterAnimationResource> = asset_server.load("data/player.ron");
     commands.insert_resource(handle);
-
-    let texture_handle = asset_server.load("player.png");
-    let texture_atlas = TextureAtlas::from_grid_with_padding(texture_handle, Vec2::new(48.0, 69.0), 7, 1, Vec2::ZERO, Vec2::new(50.0, 27.0));
-    let texture_atlas_handle = texture_atlases.add(texture_atlas);
-
-    // commands
-    //     .spawn()
-    //     .insert(PlayerComponent { speed: 1.5 })
-    //     .insert(RigidBody::Dynamic);
-    commands
-        .spawn_bundle(SpriteSheetBundle {
-            texture_atlas: texture_atlas_handle,
-            // transform: Transform::from_translation(Vec3::new(0.0, 0.0, 1.0)),
-            transform: Transform::from_translation(Vec3::splat(1.0)),
-            ..default()
-        })
-        .insert(AnimationTimer(Timer::from_seconds(0.1, true)));
+    rapier_config.gravity = Vec2::ZERO;
 }
 
-/// Spawns a player
-pub fn spawn_player(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    character_animations: Res<Handle<CharacterAnimationResource>>,
-    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+fn player_movement(
+    keyboard_input: Res<Input<KeyCode>>,
+    mut players: Query<(&Player, &mut RigidBodyVelocity)>
 ) {
-    // spawn player
-    let texture_handle = asset_server.load("player.png");
-    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(32.0, 46.0), 6, 8);
-    let texture_atlas_handle = texture_atlases.add(texture_atlas);
-}
-
-fn animate_sprite(
-    time: Res<Time>,
-    texture_atlases: Res<Assets<TextureAtlas>>,
-    mut query: Query<(
-        &mut AnimationTimer,
-        &mut TextureAtlasSprite,
-        &Handle<TextureAtlas>,
-    )>,
-) {
-    for (mut timer, mut sprite, texture_atlas_handle) in &mut query {
-        timer.tick(time.delta());
-        if timer.just_finished() {
-            let texture_atlas = texture_atlases.get(texture_atlas_handle).unwrap();
-            sprite.index = (sprite.index + 1) % texture_atlas.textures.len();
+    for (player, mut velocity) in players.iter_mut() {
+        if keyboard_input.pressed(KeyCode::Left) {
+            velocity.linvel = Vec2::new(-player.speed, velocity.linvel.y).into();
+        }
+        if keyboard_input.pressed(KeyCode::Right) {
+            velocity.linvel = Vec2::new(player.speed, velocity.linvel.y).into();
         }
     }
 }
 
+pub fn spawn_player(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+) {
+
+    let texture_handle = asset_server.load("player.png");
+    let texture_atlas = TextureAtlas::from_grid_with_padding(
+        texture_handle,
+        Vec2::new(PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT),
+        7,
+        1,
+        Vec2::ZERO,
+        Vec2::new(50.0, 27.0),
+    );
+    let texture_atlas_handle = texture_atlases.add(texture_atlas);
+
+    commands
+        // .insert_bundle(rigid_body)
+        // .insert_bundle(collider)
+        .spawn()
+        .insert_bundle(SpriteSheetBundle {
+            texture_atlas: texture_atlas_handle,
+            transform: Transform::from_translation(Vec3::splat(1.0)),
+            ..default()
+        })
+        .insert(RigidBody::Dynamic)
+        .insert(Velocity::zero())
+        .insert(Player {
+            velocity: 100.0,
+            speed: Velocity {
+                linvel: Vec2::new(1.0, 2.0),
+                angvel: 0.4,
+            },
+        })
+        .insert(AnimationTimer(Timer::from_seconds(0.1, true)));
+}
+
 /// Set the player's animation based on what the player is doing
-pub fn set_player_animation_system(
+pub fn set_player_animation(
     keyboard_input: Res<Input<KeyCode>>,
     character_animations: Res<CharacterAnimationResource>,
     mut player_query: Query<
@@ -102,7 +114,7 @@ pub fn set_player_animation_system(
             &mut TextureAtlasSprite,
             &mut Velocity,
         ),
-        With<PlayerComponent>,
+        With<Player>,
     >,
 ) {
     for (mut character_animation, mut sprite, rb_vels) in player_query.iter_mut() {
@@ -163,45 +175,3 @@ pub fn set_player_animation_system(
     }
 }
 
-// Move player by modifying velocity with input
-pub fn player_movement_system(
-    keyboard_input: Res<Input<KeyCode>>,
-    // rapier_config: Res<RapierConfiguration>,
-    mut player_info: Query<(&PlayerComponent, &mut Velocity)>,
-    app_state: Res<State<AppState>>,
-) {
-    // if we are not playing the game prevent the player from moving
-    if app_state.current() != &AppState::InGame {
-        return;
-    }
-
-    for (player, mut rb_vels) in player_info.iter_mut() {
-        // get key presses
-        let up = keyboard_input.pressed(KeyCode::W) || keyboard_input.pressed(KeyCode::Up);
-        let down = keyboard_input.pressed(KeyCode::S) || keyboard_input.pressed(KeyCode::Down);
-        let left = keyboard_input.pressed(KeyCode::A) || keyboard_input.pressed(KeyCode::Left);
-        let right = keyboard_input.pressed(KeyCode::D) || keyboard_input.pressed(KeyCode::Right);
-
-        // convert to axis multipliers
-        let x_axis = -(left as i8) + right as i8;
-        let y_axis = -(down as i8) + up as i8;
-
-        // handle movement in x direction
-        if x_axis != 0 {
-            // accelerate to the player's maximum speed stat
-            // rb_vels.linvel.x =
-            // player.speed * (x_axis as f32) * rapier_config.scaled_shape_subdivision as f32;
-        } else {
-            rb_vels.linvel.x = 0.0;
-        }
-
-        // handle movement in y direction
-        if y_axis != 0 {
-            // accelerate to the player's maximum speed stat
-            // rb_vels.linvel.y =
-            //     player.speed * (y_axis as f32) * rapier_config.scaled_shape_subdivision as f32;
-        } else {
-            rb_vels.linvel.y = 0.0;
-        }
-    }
-}

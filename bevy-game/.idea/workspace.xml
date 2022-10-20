@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5d28b4a-8328-45ff-b11e-fa13b4ca82b6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/fonts/ogg.ttf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/animation.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/animation.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gamestate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/gamestate.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/player.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/player.rs" afterDir="false" />
     </list>
@@ -64,7 +63,10 @@
     "nodejs_package_manager_path": "npm",
     "org.elm.workspace.PROJECT_DISCOVERY": "true",
     "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.Console Font",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "zielu.gittoolbox.app.config.v2",
     "show.migrate.to.gradle.popup": "false",
     "vue.rearranger.settings.migration": "true"
   }
@@ -114,7 +116,11 @@
       <option name="presentableId" value="Default" />
       <updated>1664176737897</updated>
       <workItem from="1664176739448" duration="3395000" />
-      <workItem from="1664180176215" duration="4410000" />
+      <workItem from="1664180176215" duration="13234000" />
+      <workItem from="1664568533691" duration="799000" />
+      <workItem from="1664573303276" duration="181000" />
+      <workItem from="1664573495406" duration="20976000" />
+      <workItem from="1665477179251" duration="17596000" />
     </task>
     <servers />
   </component>
