@@ -9,10 +9,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a5d28b4a-8328-45ff-b11e-fa13b4ca82b6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/animation.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gamestate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/gamestate.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/player.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/player.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -132,6 +128,7 @@
       <workItem from="1666539106851" duration="4409000" />
       <workItem from="1666829334526" duration="4444000" />
       <workItem from="1666968644547" duration="6118000" />
+      <workItem from="1667249983898" duration="722000" />
     </task>
     <servers />
   </component>
