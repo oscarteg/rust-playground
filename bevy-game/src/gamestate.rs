@@ -10,6 +10,8 @@ struct MenuData {
     button_entity: Entity,
 }
 
+
+// Plugin
 pub struct StatePlugin;
 
 impl Plugin for StatePlugin {

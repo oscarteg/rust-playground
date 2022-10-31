@@ -16,7 +16,6 @@ use bevy::window::close_on_esc;
 use gamestate::StatePlugin;
 use player::PlayerPlugin;
 
-mod animation;
 mod gamestate;
 mod player;
 
@@ -40,14 +39,12 @@ fn main() {
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
         // Game
         .add_plugin(PlayerPlugin)
-        .add_plugin(StatePlugin)
-
         .add_system(close_on_esc);
 
     app.run();
 }
 
-pub const BACKGROUND_Z: f32 = 0.0;
+pub const BACKGROUND_Z: f32 = 1.0;
 
 /// Setup physics, camera, background, foreground, walls
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
