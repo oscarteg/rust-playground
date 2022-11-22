@@ -13,11 +13,18 @@ use bevy::ecs::archetype::Archetypes;
 use bevy::ecs::component::Components;
 use bevy::window::close_on_esc;
 
-use gamestate::StatePlugin;
 use player::PlayerPlugin;
 
-mod gamestate;
+mod cursor;
 mod player;
+
+pub const BACKGROUND_Z: f32 = 1.0;
+
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
+enum AppState {
+    MainMenu,
+    InGame,
+}
 
 #[cfg(debug_assertions)]
 fn main() {
@@ -31,6 +38,7 @@ fn main() {
         resizable: true,
         ..Default::default()
     })
+
         .add_startup_system(setup)
         .add_plugins(DefaultPlugins)
         // Debug / Helper
@@ -44,22 +52,18 @@ fn main() {
     app.run();
 }
 
-pub const BACKGROUND_Z: f32 = 1.0;
 
-/// Setup physics, camera, background, foreground, walls
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
-    // create camera
     commands.spawn_bundle(Camera2dBundle::default());
 
     // create background
-    commands
-        .spawn()
-        .insert_bundle(SpriteBundle {
-            texture: asset_server.load("level.png"),
-            transform: Transform::from_translation(Vec3::new(0.0, 0.0, BACKGROUND_Z)),
-            ..Default::default()
-        })
-        .insert(Name::new("Background"));
+    // commands
+    //     .spawn_bundle(SpriteBundle {
+    //         texture: asset_server.load("level.png"),
+    //         transform: Transform::from_translation(Vec3::new(0.0, 0.0, BACKGROUND_Z)),
+    //         ..Default::default()
+    //     })
+    //     .insert(Name::new("Background"));
 }
 
 // Debugging
@@ -71,7 +75,6 @@ fn print_resources(archetypes: &Archetypes, components: &Components) {
         .map(|info| info.name())
         .collect();
 
-    // sort list alphebetically
     r.sort();
     r.iter().for_each(|name| println!("{}", name));
 }
