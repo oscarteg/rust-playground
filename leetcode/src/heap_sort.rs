@@ -37,11 +37,11 @@ impl<T> Node<T> {
             right: None,
         }
     }
-    pub fn left(self, Node: Node<T>) -> Option<Box<Node<T>>> {
+    pub fn left(self, node: Node<T>) -> Option<Box<Node<T>>> {
         self.left
     }
 
-    pub fn right(self, Node: Node<T>) -> Option<Box<Node<T>>> {
+    pub fn right(self, node: Node<T>) -> Option<Box<Node<T>>> {
         self.right
     }
 }

@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use crate::ListNode;
 
 /// Add two numbers from a linked list
@@ -7,9 +5,9 @@ pub fn add_two_numbers(
     left: Option<Box<ListNode>>,
     right: Option<Box<ListNode>>,
 ) -> Option<Box<ListNode>> {
-    let dummy_head = ListNode::new(0);
-    let curr = &dummy_head;
-    let mut carry = 0;
+    // let dummy_head = ListNode::new(0);
+    // let _curr = &dummy_head;
+    // let mut carry = 0;
 
     None
 }

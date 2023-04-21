@@ -5,6 +5,7 @@ authors = ["Oscar te Giffel <oscar@tegiffel.com>"]
 edition = "2021"
 
 [workspace]
+resolver = "2"
 members = [
     "minigrep",
     "workout",
@@ -25,7 +26,9 @@ members = [
     "vulkan-2d-game",
     "bevy-game",
     "chess",
-    "webserver"
+    "webserver",
+    "wasm",
+    "axum-webserver"
 ]
 
 
@@ -40,3 +43,6 @@ serde_json = "1.0.79"
 thiserror = "1.0.30"
 chrono = "0.4.19"
 futures = "0.3.21"
+reqwest = { version = "0.11", features = ["blocking"] }
+scraper = "0.14"
+hyper = "0.14.26"

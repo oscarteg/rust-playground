@@ -27,3 +27,15 @@ pub struct Node {
     next: Option<Box<Node>>,
     prev: Option<Box<Node>>,
 }
+
+impl Node {
+    fn new(value: u64) -> Node {
+        Node {
+            value,
+            next: None,
+            prev: None,
+        }
+    }
+}
+
+

@@ -1,4 +1,7 @@
+use std::fmt::Debug;
+
 use bevy::prelude::*;
+use bevy::sprite::MaterialMesh2dBundle;
 use bevy::utils::HashMap;
 use bevy_rapier2d::plugin::RapierPhysicsPlugin;
 use bevy_rapier2d::prelude::*;
@@ -10,7 +13,7 @@ use serde::Deserialize;
 pub const PLAYER_SPRITE_SHEET_OFF_SET: f32 = 27.0;
 pub const PLAYER_SPRITE_SHEET_PADDING: f32 = 24.0;
 pub const PLAYER_SPRITE_SCALE: f32 = 2.0;
-pub const PLAYER_Z: f32 = 5.0;
+pub const PLAYER_Z: f32 = 100.0;
 
 // Plugin
 
@@ -19,20 +22,13 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(setup);
+        app.add_startup_system(spawn_player);
         app.add_plugin(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0));
         app.add_plugin(RapierDebugRenderPlugin::default());
 
         let file_bytes: &[u8; 274] = include_bytes!("../data/character_animations.ron");
         app.insert_resource(from_bytes::<CharacterAnimationResource>(file_bytes).unwrap());
-        app.add_system_set(
-            SystemSet::new()
-                .with_system(spawn_player)
-                .with_system(player_movement_system)
-                .with_system(set_player_animation_system.label("set_player_animation")),
-        );
-
         app.add_system(basic_sprite_animation_system);
-        app.add_system(animate_character_system.after("set_player_animation"));
     }
 }
 
@@ -51,19 +47,10 @@ enum Direction {
 }
 
 fn setup(
-    // commands: Commands,
+    commands: Commands,
     asset_server: Res<AssetServer>,
     // mut texture_atlases: ResMut<Assets<TextureAtlas>>,
-    mut rapier_config: ResMut<RapierConfiguration>,
 ) {
-    rapier_config.gravity = Vec2::ZERO;
-
-    // commands
-    //     .spawn()
-    //     .insert(Direction::Up)
-    //     .insert(Player { speed: 100.0 })
-    //     .insert(RigidBody::Dynamic)
-    //     .insert(Velocity::zero())
 }
 
 ///
@@ -73,11 +60,15 @@ pub fn spawn_player(
     asset_server: Res<AssetServer>,
     character_animations: Res<CharacterAnimationResource>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
+    mut rapier_config: ResMut<RapierConfiguration>,
 ) {
+    rapier_config.gravity = Vec2::ZERO;
     // spawn player
     let character_starting_animation = CharacterAnimationType::ForwardIdle;
-    let texture_handle = asset_server.load("player.png");
-    let texture_atlas = TextureAtlas::from_grid(texture_handle, Vec2::new(32.0, 46.0), 6, 8);
+    let texture_handle = asset_server.load("player_spritesheet.png");
+
+    let texture_atlas =
+        TextureAtlas::from_grid(texture_handle, Vec2::new(32.0, 46.0), 6, 8, None, None);
     let texture_atlas_handle = texture_atlases.add(texture_atlas);
 
     let sprite_transform = Transform {
@@ -86,17 +77,16 @@ pub fn spawn_player(
         ..Default::default()
     };
 
-    commands
-        .spawn()
-        .insert(Player { speed: 1.5 })
-        .insert(CharacterAnimationComponent {
+    commands.spawn((
+        Player { speed: 1.5 },
+        CharacterAnimationComponent {
             timer: AnimationTimer(Timer::from_seconds(
                 character_animations.animations[&character_starting_animation].2 as f32,
-                true,
+                TimerMode::Once,
             )),
             animation_type: character_starting_animation.clone(),
-        })
-        .insert_bundle(SpriteSheetBundle {
+        },
+        SpriteSheetBundle {
             texture_atlas: texture_atlas_handle,
             transform: sprite_transform,
             sprite: TextureAtlasSprite {
@@ -104,20 +94,10 @@ pub fn spawn_player(
                 ..Default::default()
             },
             ..Default::default()
-        })
-        .insert(RigidBody::Dynamic)
-        .insert(Velocity::zero());
-    // .insert_bundle(
-    //     body_type: RigidBodyType::Dynamic,
-    //     mass_properties: RigidBodyMassPropsFlags::ROTATION_LOCKED.into(),
-    //     position: Vec2::new(10.0, 0.0).into(),
-    //     ..Default::default()
-    // })
-    //         .insert_bundle((
-    //             RigidBodyPositionSync::Discrete,
-    //             Name::new("Player"),
-    //             Player { speed: 1.5 },
-    //         ));
+        },
+        RigidBody::Dynamic,
+        Velocity::zero(),
+    ));
 }
 
 // Set the player's animation based on what the player is doing
@@ -141,6 +121,27 @@ pub fn set_player_animation_system(
             if keyboard_input.just_released(KeyCode::A)
                 || keyboard_input.just_released(KeyCode::Left)
             {
+                pub fn set_player_animation_system(
+                    keyboard_input: Res<Input<KeyCode>>,
+                    character_animations: Res<CharacterAnimationResource>,
+                    mut player_query: Query<
+                        (
+                            &mut CharacterAnimationComponent,
+                            &mut TextureAtlasSprite,
+                            &Velocity,
+                        ),
+                        With<Player>,
+                    >,
+                ) {
+                    for (mut character_animation, mut sprite, rb_vels) in player_query.iter_mut() {
+                        let mut restart_animation = false;
+
+                        // set to idle animation if velocity is 0 and key is released
+                        if rb_vels.linvel.x == 0.0 && rb_vels.linvel.y == 0.0 {
+                            if keyboard_input.just_released(KeyCode::A)
+                                || keyboard_input.just_released(KeyCode::Left)
+                            {
+                                character_animation.animation_type = CharacterAnimationType::LeftIdle;
                 character_animation.animation_type = CharacterAnimationType::LeftIdle;
                 restart_animation = true;
             } else if keyboard_input.just_released(KeyCode::D)
@@ -153,11 +154,16 @@ pub fn set_player_animation_system(
             {
                 character_animation.animation_type = CharacterAnimationType::BackwardIdle;
                 restart_animation = true;
-            } else if keyboard_input.just_released(KeyCode::S)
-                || keyboard_input.just_released(KeyCode::Down)
-            {
-                character_animation.animation_type = CharacterAnimationType::ForwardIdle;
-                restart_animation = true;
+            } else {
+                match keyboard_input.just_released(KeyCode::S)
+                    || keyboard_input.just_released(KeyCode::Down)
+                {
+                    true => {
+                        character_animation.animation_type = CharacterAnimationType::ForwardIdle;
+                        restart_animation = true;
+                    }
+                    false => (),
+                }
             }
         }
         // set to move animation if key pressed
@@ -186,8 +192,10 @@ pub fn set_player_animation_system(
             let animation_data =
                 character_animations.animations[&character_animation.animation_type];
             sprite.index = animation_data.0 as usize;
-            character_animation.timer =
-                AnimationTimer(Timer::from_seconds(animation_data.2 as f32, true));
+            character_animation.timer = AnimationTimer(Timer::from_seconds(
+                animation_data.2 as f32,
+                TimerMode::Once,
+            ));
         }
     }
 }
@@ -227,8 +235,13 @@ pub fn player_movement_system(
     }
 }
 
+//
+//
+//
 // Animation
-
+//
+//
+//
 #[derive(Component, DerefMut, Deref)]
 pub struct AnimationTimer(Timer);
 
@@ -259,7 +272,7 @@ impl CharacterAnimationType {
 }
 
 /// Stores data about character animations frames (data/character_animations.ron)
-#[derive(Deserialize)]
+#[derive(Deserialize, Resource)]
 pub struct CharacterAnimationResource {
     // start and end indexes of animations
     pub animations: HashMap<CharacterAnimationType, (f32, f32, f32)>,

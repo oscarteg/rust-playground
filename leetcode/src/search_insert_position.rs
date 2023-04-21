@@ -16,7 +16,7 @@ pub fn search_insert_v2(nums: Vec<i32>, target: i32) -> i32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::search_insert_position::{search_insert, search_insert_v2};
+    use crate::search_insert_position::search_insert_v2;
 
     #[test]
     fn it_works() {

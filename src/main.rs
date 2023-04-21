@@ -1,9 +1,12 @@
+mod add;
 mod double_linked_list;
 mod higher_rank_trait_bounds;
+mod iterator;
+mod largest_product;
 mod rust_is_hard;
+mod serde;
 mod tiny_traits;
 mod traits;
-mod serde;
 mod web_scraping;
 
 use rand::Rng;

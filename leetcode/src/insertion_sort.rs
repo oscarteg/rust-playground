@@ -1,4 +1,6 @@
-pub fn insertion_sort(nums: &mut Vec<i32>, k: i32) {}
+pub fn insertion_sort(nums: &mut Vec<i32>, k: i32) {
+    nums.iter().for_each(|num| {})
+}
 
 #[cfg(test)]
 mod tests {

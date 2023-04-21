@@ -3,7 +3,7 @@ struct Solution {
 }
 
 impl Solution {
-    fn isBadVersion(&self, version: i32) -> bool {
+    fn is_bad_version(&self, version: i32) -> bool {
         self.is_bad_version == version
     }
 
@@ -14,7 +14,7 @@ impl Solution {
         while high > (low + 1) {
             let mid = low + (high - low) / 3;
 
-            if self.isBadVersion(mid) {
+            if self.is_bad_version(mid) {
                 high = mid;
             } else {
                 low = mid;

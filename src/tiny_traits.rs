@@ -5,7 +5,6 @@ use std::io::{Error, ErrorKind};
 use std::net::{Ipv4Addr, Ipv6Addr, SocketAddr};
 use std::vec::IntoIter;
 use std::{convert::Infallible, net::SocketAddr};
-use tokio::net::unix::SocketAddr;
 
 pub(crate) trait IsLocalhost {
     fn is_localhost(&self) -> bool;
@@ -40,7 +39,7 @@ impl IsLocalhost for Ipv6Addr {
     }
 }
 
-impl IsLocalhost for IpAddr {
+impl IsLocalhost for Ipv4Addr {
     fn is_localhost(&self) -> bool {
         match self {
             Ipv4Addr::V4(ref a) => a.is_localhost(),
