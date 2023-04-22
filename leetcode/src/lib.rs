@@ -11,6 +11,7 @@ pub mod heap_sort;
 pub mod insertion_sort;
 pub mod lru_cache;
 pub mod move_zeroes;
+pub mod multiple;
 pub mod pattern_defeating_quicksort;
 pub mod quicksort;
 pub mod roman_to_integer;
@@ -31,3 +32,5 @@ impl ListNode {
         ListNode { next: None, val }
     }
 }
+
+struct Solution;
