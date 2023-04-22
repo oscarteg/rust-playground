@@ -1,5 +1,5 @@
 use futures::future::BoxFuture;
-use std::future::Future;
+
 
 #[derive(Debug)]
 struct Update;

@@ -20,7 +20,7 @@ impl Drop for FireWork {
 
 #[test]
 fn test_drop() {
-    let x = HasDrop {
+    let _x = HasDrop {
         foo: String::from("bar"),
     };
 }

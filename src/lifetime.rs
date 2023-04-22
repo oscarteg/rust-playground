@@ -25,7 +25,7 @@ fn test() {
     let novel = String::from("call me ");
     let first_sentence = novel.split('.').next().expect("could not find a .");
 
-    let i = ImportantExcerpt {
+    let _i = ImportantExcerpt {
         part: first_sentence,
     };
 }
@@ -43,7 +43,7 @@ fn first_word(s: &str) -> &str {
         }
     }
 
-    &s[..]
+    s
 }
 
 #[test]

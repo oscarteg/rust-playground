@@ -1,5 +1,5 @@
 use std::cmp::Ordering;
-use std::fmt::Debug;
+
 
 fn binary_search<T>(haystack: &[T], needle: &T) -> Option<usize>
 where
@@ -38,7 +38,7 @@ mod tests {
 
     #[test]
     fn test_binary_search() {
-        let mut slice = vec![1, 5, 10, 25, 56, 32, 299];
+        let slice = vec![1, 5, 10, 25, 56, 32, 299];
 
         let index = binary_search(&slice, &5);
         assert_eq!(index, Some(1));
@@ -46,7 +46,7 @@ mod tests {
 
     #[test]
     fn test_linear_search() {
-        let mut slice = vec![1, 5, 10, 25, 56, 32, 299];
+        let slice = vec![1, 5, 10, 25, 56, 32, 299];
 
         let index = linear_search(&slice, &5);
         assert_eq!(index, Some(1));

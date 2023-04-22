@@ -16,12 +16,12 @@ use std::fs::File;
 use std::io;
 use std::io::{Error, ErrorKind, Read};
 use std::net::IpAddr;
-use std::panic::panic_any;
+
 
 fn main() {
     let f = File::open("./hello.txt");
 
-    let f = match f {
+    let _f = match f {
         Ok(file) => file,
         Err(error) => match error.kind() {
             ErrorKind::NotFound => match File::create("hello.txt") {
@@ -34,7 +34,7 @@ fn main() {
         },
     };
 
-    let f = File::open("hello.txt").unwrap_or_else(|error| {
+    let _f = File::open("hello.txt").unwrap_or_else(|error| {
         if error.kind() == ErrorKind::NotFound {
             File::create("hello.txt")
                 .unwrap_or_else(|error| panic!("Problem creating file {:?}", error))
@@ -44,11 +44,11 @@ fn main() {
     });
 
     println!("{:?}", read_username_from_file_v2().unwrap());
-    let home: IpAddr = "127.0.0.1".parse().unwrap();
+    let _home: IpAddr = "127.0.0.1".parse().unwrap();
 
     // guess_the_number();
 
-    println!("{}", largest(&vec![1, 2, 3]));
+    println!("{}", largest(&[1, 2, 3]));
 }
 
 fn read_username_from_file_v2() -> Result<String, Error> {
@@ -128,8 +128,8 @@ where
 {
     let mut largest = &list[0];
     for item in list {
-        if item > &*largest {
-            largest = &item;
+        if item > largest {
+            largest = item;
         }
     }
     largest
@@ -142,7 +142,7 @@ pub struct Guess {
 
 impl Guess {
     pub fn new(value: i32) -> Guess {
-        if value < 1 || value > 100 {
+        if !(1..=100).contains(&value) {
             panic!("must be between 1 - 100 {}", value);
         }
 

@@ -62,7 +62,7 @@ pub struct ExprTopo {
 
 impl ExprTopo {
     fn eval(self) -> i64 {
-        let mut results = repeat_with(|| MaybeUninit::<i64>::uninit())
+        let mut results = repeat_with(MaybeUninit::<i64>::uninit)
             .take(self.elems.len())
             .collect::<Vec<_>>();
 
@@ -111,12 +111,9 @@ mod tests {
     use super::*;
     #[test]
     fn name() {
-        ExprBoxed::Mul {
-            a: Box::new(ExprBoxed::LiteralInt { literal: 1 }),
-            b: Box::new(ExprBoxed::Sub {
+        Box::new(ExprBoxed::LiteralInt { literal: 1 });Box::new(ExprBoxed::Sub {
                 a: Box::new(ExprBoxed::LiteralInt { literal: 2 }),
                 b: Box::new(ExprBoxed::LiteralInt { literal: 3 }),
-            }),
-        };
+            });
     }
 }

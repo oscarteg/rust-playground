@@ -15,5 +15,5 @@ fn foo(m: &Medewerker) {
         }
     }
 
-    ()
+    
 }

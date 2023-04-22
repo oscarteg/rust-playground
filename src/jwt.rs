@@ -64,8 +64,8 @@ pub async fn login_handler(users: Users, body: LoginRequest) -> WebResult<impl R
         .find(|(_uid, user)| user.email == body.email && user.pw == body.pw)
     {
         Some((uid, user)) => {
-            let token = auth::create_jwt(&uid, &Role::from_str(&user.role))
-                .map_err(|e| reject::custom(e))?;
+            let token = auth::create_jwt(uid, &Role::from_str(&user.role))
+                .map_err(reject::custom)?;
             Ok(reply::json(&LoginResponse { token }))
         }
         None => Err(reject::custom(WrongCredentialsError)),
@@ -256,7 +256,7 @@ mod auth {
 
                 Ok(decoded.claims.sub)
             }
-            Err(e) => return Err(reject::custom(e)),
+            Err(e) => Err(reject::custom(e)),
         }
     }
 
