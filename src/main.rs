@@ -5,7 +5,6 @@ mod iterator;
 mod largest_product;
 mod rust_is_hard;
 mod serde;
-mod tiny_traits;
 mod traits;
 mod web_scraping;
 
