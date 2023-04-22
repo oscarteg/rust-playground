@@ -1,3 +1,7 @@
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+
 mod add;
 mod double_linked_list;
 mod higher_rank_trait_bounds;
@@ -16,7 +20,6 @@ use std::fs::File;
 use std::io;
 use std::io::{Error, ErrorKind, Read};
 use std::net::IpAddr;
-
 
 fn main() {
     let f = File::open("./hello.txt");

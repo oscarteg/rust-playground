@@ -1,3 +1,7 @@
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+
 mod drop;
 mod iterator;
 mod jwt;
@@ -5,10 +9,10 @@ mod lifetime;
 mod macros;
 mod new_type_idiom;
 mod patterns;
+mod recursion;
 mod search;
 mod smart_pointers;
 mod traits;
-mod recursion;
 
 pub fn add_two(a: i32) -> i32 {
     internal_adder(a, 2)
