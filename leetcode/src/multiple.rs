@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::Solution;
 
 impl Solution {
@@ -38,8 +40,9 @@ impl Solution {
 
         // loop until end of array
         for i in 0..nums.len() {
-            if left_sum == total_sum - left_sum - nums[i] {
-                return i as i32;
+            match left_sum == total_sum - left_sum - nums[i] {
+                true => return i as i32,
+                false => (),
             }
             left_sum += nums[i]
         }
@@ -48,8 +51,42 @@ impl Solution {
     }
 }
 
+impl Solution {
+    pub fn is_isomorphic(s: String, t: String) -> bool {
+        let mut map_s = HashMap::new();
+        let mut map_t = HashMap::new();
+
+        for (i, (s_char, t_char)) in s.chars().zip(t.chars()).enumerate() {
+            if map_s.insert(s_char, i) != map_t.insert(t_char, i) {
+                return false;
+            }
+        }
+
+        true
+    }
+}
+
 #[cfg(test)]
 mod tests {
+
+    use super::Solution;
+
+    #[test]
+    fn test_is_isomorphic() {
+        assert!(Solution::is_isomorphic(
+            String::from("egg"),
+            String::from("add")
+        ));
+        assert!(!Solution::is_isomorphic(
+            String::from("foo"),
+            String::from("bar")
+        ));
+
+        assert!(Solution::is_isomorphic(
+            String::from("paper"),
+            String::from("title")
+        ));
+    }
 
     #[test]
     fn pivot_index() {
