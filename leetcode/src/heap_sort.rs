@@ -46,7 +46,7 @@ impl<T> Node<T> {
     }
 }
 
-pub fn heap_sort(nums: &mut Vec<i32>, k: i32) {}
+pub fn heap_sort(nums: &mut [i32], k: i32) {}
 
 #[cfg(test)]
 mod tests {

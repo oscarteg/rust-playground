@@ -28,7 +28,9 @@ members = [
     "chess",
     "webserver",
     "wasm",
-    "axum-webserver"
+    "axum-webserver",
+    "axum-graphql",
+    "wgpu"
 ]
 
 

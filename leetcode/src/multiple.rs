@@ -18,6 +18,17 @@ impl Solution {
 }
 
 impl Solution {
+    pub fn find_duplicate(nums: Vec<i32>) -> i32 {
+        nums.into_iter().fold(0, |acc, cur| {
+            if acc & (1 << cur) > 0 {
+                return cur;
+            }
+            acc | (1 << cur)
+        })
+    }
+}
+
+impl Solution {
     pub fn running_sum(nums: Vec<i32>) -> Vec<i32> {
         let mut sum = 0;
         let v: Vec<i32> = Vec::new();
@@ -39,12 +50,11 @@ impl Solution {
         let mut left_sum = 0;
 
         // loop until end of array
-        for i in 0..nums.len() {
-            match left_sum == total_sum - left_sum - nums[i] {
-                true => return i as i32,
-                false => (),
+        for i in &nums {
+            if left_sum == total_sum - left_sum - nums[*i as usize] {
+                return *i as i32;
             }
-            left_sum += nums[i]
+            left_sum += nums[*i as usize]
         }
 
         -1
@@ -70,6 +80,12 @@ impl Solution {
 mod tests {
 
     use super::Solution;
+
+    #[test]
+    fn test_find_duplicate() {
+        assert!(Solution::find_duplicate(vec![1, 3, 4, 2, 2]) == 2);
+        assert!(Solution::find_duplicate(vec![3, 1, 3, 4, 2]) == 3);
+    }
 
     #[test]
     fn test_is_isomorphic() {

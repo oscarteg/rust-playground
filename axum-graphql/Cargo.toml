@@ -1,0 +1,15 @@
+[package]
+name = "axum-graphql"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-graphql = "5.0.8"
+async-graphql-axum = "5.0.8"
+axum = "0.6.18"
+dotenv = "0.15.0"
+tokio = {version = "1.28.1", features = ["full"]}
+tracing = "0.1.37"
+serde = {version = "1.0.147", features = ["derive"]}
