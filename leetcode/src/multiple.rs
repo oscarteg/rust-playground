@@ -76,10 +76,41 @@ impl Solution {
     }
 }
 
+impl Solution {
+    pub fn merge(nums: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
+        let mut j = m as usize - 1;
+        let mut k = n as usize - 1;
+
+        // Loop backwards in array, m+n is always the size of array
+        for i in (0..(m + n) as usize).rev() {
+            match nums.get(j).cmp(&nums2.get(k)) {
+                std::cmp::Ordering::Less => {
+                    nums[i] = nums2[k];
+                    k -= 1;
+                }
+                std::cmp::Ordering::Equal | std::cmp::Ordering::Greater => {
+                    nums[k] = nums[j];
+                    j -= 1;
+                }
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
 
     use super::Solution;
+
+    #[test]
+    fn test_merge() {
+        let mut z = vec![1, 2, 3, 0, 0, 0];
+        Solution::merge(&mut z, 3, &mut vec![2, 5, 6], 3);
+
+        println!("{:?}", z);
+
+        assert!(z == vec![1, 2, 2, 3, 5, 6]);
+    }
 
     #[test]
     fn test_find_duplicate() {
