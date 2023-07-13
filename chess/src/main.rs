@@ -1,31 +1,31 @@
-use std::fmt::Display;
-
 fn main() {
-    let player1: Player = Player::new();
-    let player2: Player = Player::new();
-
-    player1.play(&player2);
+    println!("Hello, world!");
 }
 
+// Starting position in FEN notation
+const FEN_STARTING_POSITION: &str = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Debug, Hash)]
-enum Color {
+pub enum Color {
     BLACK,
     WHITE,
 }
 
-const FILE_A: u64 = 0x0101010101010101;
-const FILE_B: u64 = FILE_A << 1;
-const FILE_C: u64 = FILE_A << 2;
-const FILE_D: u64 = FILE_A << 3;
-const FILE_E: u64 = FILE_A << 4;
-const FILE_F: u64 = FILE_A << 5;
-const FILE_G: u64 = FILE_A << 6;
-const FILE_H: u64 = FILE_A << 7;
+pub struct Sides;
+impl Sides {
+    pub const WHITE: usize = 0;
+    pub const BLACK: usize = 1;
+}
 
-const RANK_1: u64 = 0xFF;
-const RANK_2: u64 = RANK_1 << 8;
-const RANK_7: u64 = RANK_1 << 48;
-const RANK_8: u64 = RANK_1 << 56;
+pub struct Pieces;
+impl Pieces {
+    pub const PAWN: usize = 0;
+    pub const BISHOP: usize = 1;
+    pub const KNIGHT: usize = 2;
+    pub const ROOK: usize = 3;
+    pub const QUEEN: usize = 4;
+    pub const KING: usize = 5;
+}
 
 pub enum Action {
     Move,
@@ -35,28 +35,10 @@ pub enum Action {
     Resign(Player),
 }
 
-/// A piece on a board.
-///
-/// Every piece has both a color and a position.
-/// These, combined with the type of piece it is,
-/// determine things like
-/// 1. The validity of legal moves
-/// 2. The validity of legal attacks
-/// 3. Move generation
-/// 4. Material and positional value
-///
-pub enum Piece {
-    King(Color, Position),
-    Queen(Color, Position),
-    Rook(Color, Position),
-    Bishop(Color, Position),
-    Knight(Color, Position),
-    Pawn(Color, Position),
-}
-
 const BASE_RATING: i32 = 1200;
 
-struct Player {
+pub struct Player {
+    name: &'static str,
     rating: i32,
     wins: i32,
     losses: i32,
@@ -66,6 +48,7 @@ struct Player {
 impl Clone for Player {
     fn clone(&self) -> Self {
         Self {
+            name: self.name,
             rating: self.rating,
             wins: self.wins,
             losses: self.losses,
@@ -75,126 +58,103 @@ impl Clone for Player {
 }
 
 impl Player {
-    fn new() -> Self {
+    fn new(name: &'static str) -> Self {
         Self {
-            rating: 1200,
+            name,
+            rating: BASE_RATING,
             wins: 0,
             losses: 0,
             draws: 0,
         }
     }
 
-    fn play(&self, opponent: &Player) {}
+    fn play(&self, _opponent: &Player) {
+        todo!()
+    }
 
     fn total_games(&self) -> i32 {
         self.wins + self.losses + self.draws
     }
 
+    /// Returns the performance rating of the player against the given opponent.
+    /// The performance rating is calculated using the formula:
+    /// (opponent rating + 400 * (wins - losses)) / total games
+    /// The performance rating is used to calculate the new rating of the player
+    /// after a game.
+    /// See https://en.wikipedia.org/wiki/Elo_rating_system#Performance_rating
+    /// for more details.
+    /// # Examples
+    /// ```
+    /// let player1 = Player::new();
+    /// let player2 = Player::new();
+    /// assert_eq!(player1.performance_rating(&player2), 1200);
+    /// ```
+    /// ```
+    /// let player1 = Player::new();
+    /// let player2 = Player::new();
+    /// player1.wins += 1;
+    /// assert_eq!(player1.performance_rating(&player2), 1400);
+    /// ```
     fn performance_rating(&self, opponent: &Player) -> i32 {
         (opponent.rating + 400 * (self.wins - self.losses)) / self.total_games()
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
-struct Position {
+#[derive(PartialEq, Eq, PartialOrd, Clone, Copy, Debug, Default, Hash)]
+pub struct Board(pub u64);
+
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct Position {
     /// Board for each side
     bb_sides: [Board; 2],
     // BitBoards for all pieces and each side
     bb_pieces: [[Board; 6]; 2],
-
-    state: State,
-}
-
-struct Square {
-    file: usize,
-    rank: usize,
-}
-
-/// Contains castling_rights, move_clocks, en_passant_square if possible and the side to move
-#[derive(Debug, Clone, Hash, Eq, PartialEq)]
-pub struct State {
-    castling_rights: CastlingRights,
-    en_passant_square: Option<Square>,
-    half_move_counter: u8,
-    stm: usize,
-}
-
-enum CastlingRights {
-    WhiteKingSide,
-    WhiteQueenSide,
-    BlackKingSide,
-    BlackQueenSide,
-}
-
-struct FenError;
-
-impl Display for FenError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "FenError")
-    }
-}
-
-#[derive(PartialEq, Eq, PartialOrd, Clone, Debug)]
-struct Board {
-    pieces: [u64; 6],
-    occupancy: u64,
-    en_passant: u64,
-    castling: u64,
-    side_to_move: Color,
 }
 
 impl Board {
-    fn new() -> Self {
-        let mut board = Board {
-            pieces: [0; 6],
-            occupancy: 0,
-            en_passant: 0,
-            castling: 0b1111,
-            side_to_move: Color::WHITE,
-        };
+    fn from_fen(fen: &str) -> Self {
+        let s = fen.split(' ').collect::<Vec<&str>>();
 
-        // Set up pawns
-        board.pieces[0] = RANK_2 | RANK_7;
-        // Set up knights
-        board.pieces[1] = (FILE_B | FILE_G) & (RANK_1 | RANK_8);
-        // Set up bishops
-        board.pieces[2] = (FILE_C | FILE_F) & (RANK_1 | RANK_8);
-        // Set up rooks
-        board.pieces[3] = (FILE_A | FILE_H) & (RANK_1 | RANK_8);
-        // Set up queens
-        board.pieces[4] = (FILE_D | FILE_E) & (RANK_1 | RANK_8);
-        // Set up kings
-        board.pieces[5] = (FILE_E) & (RANK_1 | RANK_8);
-        // Set up occupancy
-        for piece in &board.pieces {
-            board.occupancy |= piece;
-        }
-        board
+        let b = s[0];
+
+        let x = b.chars().fold(Board(0), |acc, c| {
+            let mut acc = acc;
+            if c.is_ascii_digit() {
+                acc.0 <<= c.to_digit(10).unwrap();
+            } else {
+                acc.0 <<= 1;
+            }
+            acc
+        });
+
+        println!("TESTING {:?}", x);
+        x
     }
 }
 
-trait Move {
-    fn possible_moves(&self) -> Vec<Position>;
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_from_fen() {
+        // Test case 1: FEN string representing an empty board
+        let fen1 = "8/8/8/8/8/8/8/8 w - - 0 1";
+        let expected1 = 0; // Assuming 0 represents an empty board
+        let board1 = Board::from_fen(fen1);
+        assert_eq!(board1.0, expected1);
 
-    fn is_valid_move(&self, position: Position) -> bool {
-        self.possible_moves().contains(&position)
+        // Test case 2: FEN string representing a board with some pieces
+        let fen2 = "rnbqkbnr/1ppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        let expected2 = 0x18244281AAFF6600; // Example bitboard representation
+        let board2 = Board::from_fen(fen2);
+        assert_eq!(board2.0, expected2);
+
+        // Test case 3: FEN string representing a different board
+        let fen3 = "4k3/4p3/4P3/8/8/8/8/4K3 w - - 0 1";
+        let expected3 = 0x0000000000888800; // Example bitboard representation
+        let board3 = Board::from_fen(fen3);
+        assert_eq!(board3.0, expected3);
+
+        // Add more test cases as needed
     }
-}
-
-struct Game<'a> {
-    black: &'a Player,
-    white: &'a Player,
-}
-
-impl Game {
-    fn init(&mut self, black: &Player, white: &Player) -> &Game {
-        let game = Self { black, white };
-        &game
-    }
-
-    fn play_turn(&self, action: Action) {}
-
-    fn fen() {}
-
-    fn pgn() {}
 }

@@ -2,6 +2,7 @@
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 pub mod add_two_numbers;
+pub mod array;
 pub mod banned_words;
 pub mod binary_search;
 pub mod datastructures_1;
