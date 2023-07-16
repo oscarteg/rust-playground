@@ -111,9 +111,10 @@ mod tests {
     use super::*;
     #[test]
     fn name() {
-        Box::new(ExprBoxed::LiteralInt { literal: 1 });Box::new(ExprBoxed::Sub {
-                a: Box::new(ExprBoxed::LiteralInt { literal: 2 }),
-                b: Box::new(ExprBoxed::LiteralInt { literal: 3 }),
-            });
+        Box::new(ExprBoxed::LiteralInt { literal: 1 });
+        Box::new(ExprBoxed::Sub {
+            a: Box::new(ExprBoxed::LiteralInt { literal: 2 }),
+            b: Box::new(ExprBoxed::LiteralInt { literal: 3 }),
+        });
     }
 }

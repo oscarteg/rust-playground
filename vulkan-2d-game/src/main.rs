@@ -1,4 +1,3 @@
-
 #![allow(
     dead_code,
     unused_variables,
@@ -31,13 +30,17 @@ fn main() -> Result<()> {
         *control_flow = ControlFlow::Poll;
         match event {
             // Render a frame if our Vulkan app is not being destroyed.
-            Event::MainEventsCleared if !destroying =>
-                unsafe { app.render(&window) }.unwrap(),
+            Event::MainEventsCleared if !destroying => unsafe { app.render(&window) }.unwrap(),
             // Destroy our Vulkan app.
-            Event::WindowEvent { event: WindowEvent::CloseRequested, .. } => {
+            Event::WindowEvent {
+                event: WindowEvent::CloseRequested,
+                ..
+            } => {
                 destroying = true;
                 *control_flow = ControlFlow::Exit;
-                unsafe { app.destroy(); }
+                unsafe {
+                    app.destroy();
+                }
             }
             _ => {}
         }

@@ -14,6 +14,4 @@ fn foo(m: &Medewerker) {
             println!("Rune heeft geen getal maar wel: {}", s);
         }
     }
-
-    
 }

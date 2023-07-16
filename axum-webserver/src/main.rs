@@ -164,4 +164,3 @@ enum AuthError {
     TokenCreation,
     InvalidToken,
 }
-

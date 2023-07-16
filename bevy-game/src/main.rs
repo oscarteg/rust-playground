@@ -9,11 +9,8 @@
 
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use bevy::prelude::*;
+use bevy::render::render_resource::Texture;
 use bevy::window::close_on_esc;
-
-use player::PlayerPlugin;
-
-mod player;
 
 pub const BACKGROUND_Z: f32 = 1.0;
 
@@ -27,15 +24,24 @@ enum AppState {
 fn main() {
     let mut app = App::new();
 
-    app.add_startup_system(setup)
-        .add_plugins(DefaultPlugins)
-        // Debug / Helper
-        .add_plugin(LogDiagnosticsPlugin::default())
-        .add_plugin(FrameTimeDiagnosticsPlugin::default())
-        // Game
-        .add_plugin(PlayerPlugin)
-        .add_system(close_on_esc);
-
+    app.add_plugins((
+        DefaultPlugins.set(
+            // This sets image filtering to nearest
+            // This is done to prevent textures with low resolution (e.g. pixel art) from being blurred
+            // by linear filtering.
+            ImagePlugin::default_nearest(),
+        ),
+        LogDiagnosticsPlugin::default(),
+        FrameTimeDiagnosticsPlugin::default(),
+        // Any plugin can register diagnostics. Uncomment this to add an entity count diagnostics:
+        bevy::diagnostic::EntityCountDiagnosticsPlugin::default(),
+        // Uncomment this to add an asset count diagnostics:
+        // bevy::asset::diagnostic::AssetCountDiagnosticsPlugin::<Texture>::default(),
+        // Uncomment this to add system info diagnostics:
+        bevy::diagnostic::SystemInformationDiagnosticsPlugin::default(),
+    ))
+    .add_systems(Startup, setup)
+    .add_systems(Update, close_on_esc);
     app.run();
 }
 

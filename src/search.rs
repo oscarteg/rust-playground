@@ -1,6 +1,5 @@
 use std::cmp::Ordering;
 
-
 fn binary_search<T>(haystack: &[T], needle: &T) -> Option<usize>
 where
     T: Ord,
