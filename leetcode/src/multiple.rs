@@ -103,10 +103,34 @@ impl Solution {
     }
 }
 
+impl Solution {
+    pub fn majority_element(nums: Vec<i32>) -> i32 {
+        let map: HashMap<i32, usize> = HashMap::new();
+        let max: Option<i32> = nums
+            .into_iter()
+            .fold(map, |mut m, i| {
+                *m.entry(i).or_default() += 1;
+                m
+            })
+            .into_iter()
+            .max_by_key(|(_, v)| *v)
+            .map(|(k, _)| k);
+
+        max.unwrap_or(0)
+    }
+}
+
 #[cfg(test)]
 mod tests {
 
     use super::Solution;
+
+    #[test]
+    fn test_majority_element() {
+        let z = vec![1, 2, 3, 3, 3];
+
+        assert_eq!(Solution::majority_element(z), 3);
+    }
 
     #[test]
     fn test_merge() {
