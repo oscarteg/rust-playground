@@ -120,10 +120,54 @@ impl Solution {
     }
 }
 
+impl Solution {
+    // Three different solutions
+    // First: rust power lol
+    pub fn rotate_1(nums: &mut Vec<i32>, k: i32) {
+        let length = nums.len();
+        // Modulo to not rotate unnecessary
+        nums.rotate_right((k as usize) % length);
+    }
+
+    // Reverse
+    pub fn rotate_2(nums: &mut Vec<i32>, k: i32) {
+        let k = (k as usize) % nums.len();
+
+        Solution::reverse(nums);
+
+        Solution::reverse(&mut nums[0..k]);
+        Solution::reverse(&mut nums[k..]);
+    }
+
+    // O(1)
+    pub fn rotate_3(nums: &mut Vec<i32>, k: i32) {}
+
+    pub fn reverse(nums: &mut [i32]) {
+        let mid = nums.len() / 2;
+        for i in 0..mid {
+            let opp = nums.len() - i - 1;
+
+            nums.swap(i, opp);
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
 
     use super::Solution;
+    #[test]
+    fn test_rotate() {
+        let mut z = vec![1, 2, 3, 3, 3];
+        Solution::rotate_1(&mut z, 2);
+
+        assert_eq!(z, vec![3, 3, 1, 2, 3]);
+
+        let mut x = vec![1, 2, 3, 4, 5, 6];
+        Solution::rotate_2(&mut x, 5);
+
+        assert_eq!(x, vec![2, 3, 4, 5, 6, 1]);
+    }
 
     #[test]
     fn test_majority_element() {
