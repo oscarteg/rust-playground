@@ -145,9 +145,11 @@ impl Solution {
     pub fn reverse(nums: &mut [i32]) {
         let mid = nums.len() / 2;
         for i in 0..mid {
-            let opp = nums.len() - i - 1;
+            // let opp = nums.len() - i - 1;
+            //
+            // nums.swap(i, opp);
 
-            nums.swap(i, opp);
+            todo!()
         }
     }
 }
@@ -188,8 +190,8 @@ mod tests {
 
     #[test]
     fn test_find_duplicate() {
-        assert!(Solution::find_duplicate(vec![1, 3, 4, 2, 2]) == 2);
-        assert!(Solution::find_duplicate(vec![3, 1, 3, 4, 2]) == 3);
+        assert_eq!(Solution::find_duplicate(vec![1, 3, 4, 2, 2]), 2);
+        assert_eq!(Solution::find_duplicate(vec![3, 1, 3, 4, 2]), 3);
     }
 
     #[test]

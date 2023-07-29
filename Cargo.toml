@@ -4,34 +4,10 @@ version = "0.1.0"
 authors = ["Oscar te Giffel <oscar@tegiffel.com>"]
 edition = "2021"
 
+
 [workspace]
 resolver = "2"
-members = [
-    "minigrep",
-    "workout",
-    "ethereum",
-    "gui",
-    "blog",
-    "rocket",
-    "chat-tokio",
-    "yew-app",
-    "codeforces",
-    "orst",
-    "leetcode",
-    "finance",
-    "type-driven-api",
-    "rust-blockchain",
-    "messenger",
-    "sorting",
-    "vulkan-2d-game",
-    "bevy-game",
-    "chess",
-    "webserver",
-    "wasm",
-    "axum-webserver",
-    "axum-graphql",
-    "wgpu"
-]
+members = [ "crates/*" ]
 
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

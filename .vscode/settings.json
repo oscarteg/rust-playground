@@ -1,0 +1,6 @@
+{
+  "rust-analyzer.linkedProjects": [
+    "./crates/rust-blockchain/Cargo.toml",
+    "./crates/bevy-game/Cargo.toml"
+  ]
+}

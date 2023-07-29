@@ -7,9 +7,7 @@
 #![allow(clippy::enum_glob_use)]
 #![allow(dead_code, unused_variables)]
 
-use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use bevy::prelude::*;
-use bevy::render::render_resource::Texture;
 use bevy::window::close_on_esc;
 
 pub const BACKGROUND_Z: f32 = 1.0;

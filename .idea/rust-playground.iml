@@ -32,6 +32,31 @@
       <sourceFolder url="file://$MODULE_DIR$/axum-webserver/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/axum-graphql/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/wgpu/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/leptos/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/axum-graphql/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/axum-webserver/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/bevy-game/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/blog/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/chat-tokio/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/chess/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/codeforces/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/ethereum/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/finance/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/gui/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/leetcode/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/messenger/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/minigrep/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/orst/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/rocket/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/rust-blockchain/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/sorting/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/type-driven-api/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/vulkan-2d-game/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/wasm/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/webserver/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/wgpu/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/workout/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/yew-app/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/minigrep/target" />
       <excludeFolder url="file://$MODULE_DIR$/codeforces/target" />
