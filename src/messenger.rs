@@ -1,15 +1,11 @@
+use futures::{future::BoxFuture, Future};
+
 #[derive(Debug)]
 struct Update;
 
 type Handler = Box<dyn for<'a> Fn(&'a Update) -> BoxFuture<'a, ()> + Send + Sync>;
 
 struct Dispatcher(Vec<Handler>);
-
-
-
-
-
-
 
 impl Dispatcher {
     fn push_handler<'a, H, Fut>(&mut self, handler: H)

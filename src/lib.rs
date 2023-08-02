@@ -7,6 +7,7 @@ mod iterator;
 mod jwt;
 mod lifetime;
 mod macros;
+mod messenger;
 mod new_type_idiom;
 mod patterns;
 mod recursion;
