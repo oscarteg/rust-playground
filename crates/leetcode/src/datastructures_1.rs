@@ -8,22 +8,14 @@ mod tests {
     }
 
     pub fn max_sub_array(nums: Vec<i32>) -> i32 {
-        // the answer
         let mut ans = i32::MIN;
-        // the max number that can be achieved
         let mut max = 0;
-        if nums.len() > 1 {
-            // loop over all the number
-            for (_, &v) in nums.iter().enumerate() {
-                // the new max is
-                max = std::cmp::max(max + v, v);
-                ans = std::cmp::max(ans, max);
-            }
-            ans
-        } else {
-            nums[0]
+        for &num in &nums {
+            max = std::cmp::max(max + num, num);
+            ans = std::cmp::max(ans, max);
         }
-    }
+        ans
+   }
 
     /// Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
     /// Notice that the solution set must not contain duplicate triplets.
