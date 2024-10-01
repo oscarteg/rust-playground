@@ -57,6 +57,7 @@
       <sourceFolder url="file://$MODULE_DIR$/crates/wgpu/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/crates/workout/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/crates/yew-app/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/crates/termie/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/minigrep/target" />
       <excludeFolder url="file://$MODULE_DIR$/codeforces/target" />

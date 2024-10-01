@@ -36,7 +36,7 @@ impl Solution {
 
     pub fn roman_to_int(s: String) -> i32 {
         s.chars().into_iter().enumerate().fold(0, |acc, index| {
-            let roman = Roman::from_str(&char.to_string()).unwrap();
+            let roman = Roman::from_str(&s.as_str()).unwrap();
 
             acc + roman as i32
         })
