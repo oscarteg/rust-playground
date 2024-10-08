@@ -21,6 +21,7 @@ pub mod rotate_array;
 pub mod search_insert_position;
 pub mod sorted_squares;
 mod divide_two_integers;
+mod generate_parentheses;
 
 // Definition for singly-linked list.
 #[derive(PartialEq, Eq, Clone, Debug)]
